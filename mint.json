@@ -23,7 +23,7 @@
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://app.kobble.io"
   },
   "tabs": [
     {
@@ -39,13 +39,13 @@
     },
     {
       "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "icon": "discord",
+      "url": "https://discord.gg/MCQZ8T78md"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://kobble.io/blog"
     }
   ],
   "navigation": [
@@ -58,14 +58,11 @@
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Product",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "product/authentication",
+        "product/analytics",
+        "product/payment"
       ]
     },
     {
