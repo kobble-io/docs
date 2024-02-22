@@ -1,110 +1,70 @@
 ---
 title: Monetization
-description: Reusable, custom snippets to keep content in sync
+description: Start selling your API in 10 minutes.
 icon: 'money-bills'
 ---
 
-import SnippetIntro from '/snippets/snippet-intro.mdx';
+## Overview
 
-<SnippetIntro />
+Kobble allows you to monetize your content by creating products that can be sold to your customers.
 
-## Creating a custom snippet
+### Products and Prices
 
-**Pre-condition**: You must create your snippet file in the `snippets` directory.
+A `Product` is an item that you can sell to your customers at a given `Price`.
+
+A Product wraps information such as a Name, a Description and a list of Features.
+
+A `Price` can be configured to be a `one-time payment` or a `recurring subscription`.
+
+You can configure multiple prices for a single product, allowing you to offer different pricing options to your customers (e.g. a monthly, yearly, etc.).
+
+Your products will be displayed on your Customer Portal so that your customers can purchase them.
+
+You don't have to write any code to start selling your products.
+
+All your customers and payment will still be visible in your Stripe account so you can own your data and manage your customers as you wish later.
 
 <Note>
-  Any page in the `snippets` directory will be treated as a snippet and will not
-  be rendered into a standalone page. If you want to create a standalone page
-  from the snippet, import the snippet into another file and call it as a
-  component.
+    Kobble partners with Stripe to handle all payments. Having a valid Stripe account is prerequisite to use our service.
+    At the moment, we do not, nor plan to, support any other payment gateway than Stripe.
 </Note>
 
-### Default export
+### Quotas
 
-1. Add content to your snippet file that you want to re-use across multiple
-   locations. Optionally, you can add variables that can be filled in via props
-   when you import the snippet.
+A `Quota` is a limit on the usage of a product. You can configure quotas to limit the usage of your products.
 
-```mdx snippets/my-snippet.mdx
-Hello world! This is my content I want to reuse across pages. My keyword of the
-day is {word}.
-```
+When a quota is reached for a customer, Kobble will automatically return a specific message containing a link to the payment portal so the customer can upgrade their plan.
 
-<Warning>
-  The content that you want to reuse must be inside the `snippets` directory in
-  order for the import to work.
-</Warning>
+<Note>
+    By default, if no quotas are set, your customers will be able to use your products with no limit.
+</Note>
 
-2. Import the snippet into your destination file.
 
-```mdx destination-file.mdx
----
-title: My title
-description: My Description
----
+## Connecting your Stripe account
 
-import MySnippet from '/snippets/path/to/my-snippet.mdx';
+Kobble partners with Stripe to handle all payments. Having a valid Stripe account is prerequisite to use our service.
 
-## Header
+<Note>
+  At the moment, we do not, nor plan to, support any other payment gateway than Stripe.
+</Note>
 
-Lorem impsum dolor sit amet.
+To connect your Stripe account:
 
-<MySnippet word="bananas" />
-```
+1. Select the [Monetization page](https://app.kobble.io/p/monetize/products) on the left-hand sidebar.
+2. If your Stripe account is not connected, you will see a "Connect Stripe" button. Click on it.
+3. You will be redirected to Stripe's website to log in and authorize the connection.
+4. Once you have authorized the connection, you will be redirected back to Kobble.
 
-### Reusable variables
+![Stripe Connect](/images/settings/stripe-connect.jpeg)
 
-1. Export a variable from your snippet file:
+## Creating a product
 
-```mdx snippets/path/to/custom-variables.mdx
-export const myName = 'my name';
+todo
 
-export const myObject = { fruit: 'strawberries' };
-```
+## Creating a price
 
-2. Import the snippet from your destination file and use the variable:
+todo
 
-```mdx destination-file.mdx
----
-title: My title
-description: My Description
----
+## Adding Quotas
 
-import { myName, myObject } from '/snippets/path/to/custom-variables.mdx';
-
-Hello, my name is {myName} and I like {myObject.fruit}.
-```
-
-### Reusable components
-
-1. Inside your snippet file, create a component that takes in props by exporting
-   your component in the form of an arrow function.
-
-```mdx snippets/custom-component.mdx
-export const MyComponent = ({ title }) => (
-  <div>
-    <h1>{title}</h1>
-    <p>... snippet content ...</p>
-  </div>
-);
-```
-
-<Warning>
-  MDX does not compile inside the body of an arrow function. Stick to HTML
-  syntax when you can or use a default export if you need to use MDX.
-</Warning>
-
-2. Import the snippet into your destination file and pass in the props
-
-```mdx destination-file.mdx
----
-title: My title
-description: My Description
----
-
-import { MyComponent } from '/snippets/custom-component.mdx';
-
-Lorem ipsum dolor sit amet.
-
-<MyComponent title={'Custom title'} />
-```
+todo

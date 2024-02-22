@@ -29,18 +29,9 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    },
-    {
-      "name": "Authentication",
-      "url": "auth"
     }
   ],
   "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
     {
       "name": "Community",
       "icon": "discord",
@@ -82,7 +73,8 @@
     {
       "group": "API Documentation",
       "pages": [
-        "api-reference/introduction"
+        "api-reference/introduction",
+        "api-reference/authentication"
       ]
     },
     {
@@ -91,6 +83,12 @@
         "api-reference/endpoint/get",
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
+      ]
+    },
+    {
+      "group": "Get started",
+      "pages": [
+        "sdks/introduction"
       ]
     }
   ],
