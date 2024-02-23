@@ -84,12 +84,6 @@
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
       ]
-    },
-    {
-      "group": "Get started",
-      "pages": [
-        "sdks/introduction"
-      ]
     }
   ],
   "footerSocials": {
