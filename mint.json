@@ -50,7 +50,6 @@
       "group": "Product",
       "pages": [
         "product/customer-portal",
-        "product/analytics",
         {
           "group": "Authentication",
           "icon": "User",
@@ -73,7 +72,8 @@
               }
             ]
         },
-        "product/monetization"
+        "product/monetization",
+        "product/analytics"
       ]
     },
     {

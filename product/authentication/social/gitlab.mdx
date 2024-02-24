@@ -1,0 +1,45 @@
+---
+title: GitLab
+description: Configure GitLab OAuth for your Customer Portal.
+---
+
+
+## Overview
+
+Offering a sign in with GitLab in your Customer Portal can be great if you target a developer audience. It allows your users to sign in with their GitLab account and provides you with their GitLab profile.
+
+To support Sign in with GitLab you need to configure the GitLab provider in the Kobble dashboard for your project.
+
+Once configured, the GitLab sign-in button will automatically be added on your Kobble Customer Portal.
+
+## Configuration
+
+1. Open your Kobble Authentication Settings and choose the GitLab provider.
+2. Copy the provided Redirect URI. Note this URI will change if you configure a custom domain later.
+
+![GitLab Configuration 1](/images/settings/auth/gitlab-configuration-1.png)
+
+3. Open [your GitLab account](https://gitlab.com).
+4. Click on your profile picture and select Edit Profile.
+
+![GitLab Configuration 2](/images/settings/auth/gitlab-configuration-2.png)
+
+5. Then, on the left menu, choose Applications and click on Add new application.
+6. Fill in the form with the information of your application and the Redirect URI provided by Kobble and select the scopes **read_user**, **openid**, **profile**, **email**.
+
+![GitLab Configuration 3](/images/settings/auth/gitlab-configuration-3.png)
+
+<Warning>Before saving, make sure you have checked the following scopes: **read_user**, **openid**, **profile**, **email**.</Warning>
+
+8. Once created, copy the given Application ID and Secret.
+
+![GitLab Configuration 4](/images/settings/auth/gitlab-configuration-4.png)
+
+9. Paste them into your Kobble settings, turn on the Enabled switch and save.
+
+![GitLab Configuration 5](/images/settings/auth/gitlab-configuration-5.png)
+
+🎉 Et voilà! Your customer can now use GitLab to sign-in in your authentication portal. No further action is required on your end.
+
+<Warning>In case you change your Customer Portal domain later, you will have to go through this process again and update your Authorized Redirect URI in your GitLab configuration.</Warning>
+
