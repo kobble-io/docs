@@ -56,8 +56,29 @@
       "group": "Product",
       "pages": [
         "product/customer-portal",
-        "product/authentication",
         "product/analytics",
+        {
+          "group": "Authentication",
+          "icon": "User",
+            "pages": [
+                "product/authentication/overview",
+              {
+                "group": "Social Login (OAuth)",
+                "pages": [
+                  "product/authentication/social/google",
+                  "product/authentication/social/github",
+                  "product/authentication/social/gitlab",
+                  "product/authentication/social/azure-ad"
+                ]
+              },
+              {
+                "group": "Email",
+                "pages": [
+                  "product/authentication/email/magic-link"
+                ]
+              }
+            ]
+        },
         "product/monetization"
       ]
     },
