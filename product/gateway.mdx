@@ -15,6 +15,8 @@ As shown in the diagram below, the gateway will overload the initial user reques
 - The user's Quota (how many requests the user can make per day, per month, etc.)
 - The user's Plan (the product the user is subscribed to)
 
+You can find all the information sent by the gateway in the [Information sent by the gateway](#information-sent-by-the-gateway) section.
+
 ![Gateway diagram](/images/gateway-user-overloaded-req.jpg)
 
 
@@ -37,6 +39,63 @@ Having all user requests go through the gateway allows us to provide you with al
 
 ![Gateway scenario](/images/gateway-diagram.jpg)
 
+
+## Information sent by the gateway
+
+### Request headers
+
+The gateway will send the following headers with every request made to your API:
+
+- **Kobble-Timestamp**: the unix timestamp of the request
+- **Kobble-Real-Ip**: the user's IP address
+- **X-Forwarded-Host**: the original host of the request (most likely the gateway's host)
+- **X-Forwarded-For**: the original IP address of the request (most likely the user's IP address)
+- **Authorization**: the Bearer token sent by the gateway
+
+### About the Authorization header
+
+The Authorization header will contain a Bearer token in the following format:
+
+```
+Bearer <token>
+```
+
+The token will be a JWT token signed with a ES256 algorithm and containing the following claims once decoded:
+
+
+```json
+{
+  "aud": "<your_project_id>",
+  "exp": <expiration_timestamp>,
+  "iat": <issued_at_timestamp>,
+  "iss": "gateway.kobble.io",
+  "sub": "<user_id>",
+  "user": {
+    "email": "<user_email>",
+    "id": "<user_id>",
+    "name": "<user_name>" // can be null,
+    "subscription": {
+      "priceId": "<price_id>",
+      "productId": "<product_id>",
+      "quota": {
+        "interval": "MONTH", // "WEEK", "MONTH"
+        "limit": number,
+        "remaining": number,
+        "used": number
+      }
+    }
+  }
+}
+```
+
+The token is signed with a private key and can be validated with the public key provided in your dashboard.
+
+You can validate the token on your own using a JWT library or use the Kobble SDK.
+
+
+### Request body and query parameters
+
+The http payload will be sent as is to your API.
 
 ## Protecting your API
 
