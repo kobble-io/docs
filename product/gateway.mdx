@@ -50,9 +50,43 @@ The gateway will send the following headers with every request made to your API:
 - **Kobble-Real-Ip**: the user's IP address
 - **X-Forwarded-Host**: the original host of the request (most likely the gateway's host)
 - **X-Forwarded-For**: the original IP address of the request (most likely the user's IP address)
-- **Authorization**: the Bearer token sent by the gateway
+- **Authorization**: the Bearer token sent by the gateway (see [Token validation](#token-validation) for more information)
 
-### About the Authorization header
+### Request body and query parameters
+
+The http payload will be sent as is to your API.
+
+## Protecting your API
+
+In a normal scenario, all request made to your API will go through the gateway and so, will be validated.
+
+However, nothing prevent a user to bypass the gateway and send a request directly to your API.
+
+So you need to protect your API from direct requests.
+
+To do so, you can use the following methods:
+
+- **IP Whitelisting**: You can whitelist the gateway's IP addresses in your API. This way, only requests coming from the gateway will be accepted.
+- **Token Validation**: You can validate the token sent by the gateway in your API. This way, only valud requests coming from the gateway will be accepted.
+
+These methods are not mutually exclusive and you can use both of them to protect your API as shown in the following diagram.
+
+![Gateway protection](/images/gateway-ip-validation-overview.jpg)
+
+### IP Whitelisting
+
+The Kobble gateway will send requests to your API from the following IP addresses:
+
+- 34.70.245.93
+- 130.211.127.238
+- 34.72.87.26
+
+<Note>Note that these IP addresses can change overtime. Any change would be communicated by email and public announcement in our Discord community.</Note>
+
+
+### Token Validation
+
+The gateway will send a token with every request made to your API.
 
 The Authorization header will contain a Bearer token in the following format:
 
@@ -92,41 +126,3 @@ The token is signed with a private key and can be validated with the public key 
 
 You can validate the token on your own using a JWT library or use the Kobble SDK.
 
-
-### Request body and query parameters
-
-The http payload will be sent as is to your API.
-
-## Protecting your API
-
-In a normal scenario, all request made to your API will go through the gateway and so, will be validated.
-
-However, nothing prevent a user to bypass the gateway and send a request directly to your API.
-
-So you need to protect your API from direct requests.
-
-To do so, you can use the following methods:
-
-- **IP Whitelisting**: You can whitelist the gateway's IP addresses in your API. This way, only requests coming from the gateway will be accepted.
-- **Token Validation**: You can validate the token sent by the gateway in your API. This way, only valud requests coming from the gateway will be accepted.
-
-These methods are not mutually exclusive and you can use both of them to protect your API as shown in the following diagram.
-
-![Gateway protection](/images/gateway-ip-validation-overview.jpg)
-
-### IP Whitelisting
-
-The Kobble gateway will send requests to your API from the following IP addresses:
-
-- 34.70.245.93
-- 130.211.127.238
-- 34.72.87.26
-
-<Note>Note that these IP addresses can change overtime. Any change would be communicated by email and public announcement in our Discord community.</Note>
-
-
-### Token Validation
-
-The gateway will send a token with every request made to your API.
-
-To learn how to validate the token in your API, please refer to the token validation documentation.
