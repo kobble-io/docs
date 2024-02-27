@@ -1,0 +1,73 @@
+---
+title: Gateway
+description: The central point of Kobble system.
+icon: 'server'
+---
+
+## Overview
+
+When you create a new project on Kobble, we'll provide you with a gateway URL.
+
+It's the URL that your users will use to access your API.
+
+As shown in the diagram below, the gateway will overload the initial user request with the following information:
+- The user's Identity (name, email, userId) encoded in a signed token
+- The user's Quota (how many requests the user can make per day, per month, etc.)
+- The user's Plan (the product the user is subscribed to)
+
+![Gateway diagram](/images/gateway-user-overloaded-req.jpg)
+
+
+## Full scenario
+
+When seeing the diagram above you're probably wondering how the user will authenticate at first.
+
+The answer is simple: through the Customer Portal.
+
+As shown in the diagram below, a normal scenario would be:
+
+- The user will first get an authentication token from the Customer Portal.
+- Then, every request made by the user to your API will go through the gateway and contain the authentication information.
+- The gateway will then validate the user's request and forward it to your API.
+
+
+Having all user requests go through the gateway allows us to provide you with all features related to monetization, analytics, and security.
+
+<Note>The bearer sent at Step #2 won't be the same as the token you will receive in your API for security reasons.</Note>
+
+![Gateway scenario](/images/gateway-diagram.jpg)
+
+
+## Protecting your API
+
+In a normal scenario, all request made to your API will go through the gateway and so, will be validated.
+
+However, nothing prevent a user to bypass the gateway and send a request directly to your API.
+
+So you need to protect your API from direct requests.
+
+To do so, you can use the following methods:
+
+- **IP Whitelisting**: You can whitelist the gateway's IP addresses in your API. This way, only requests coming from the gateway will be accepted.
+- **Token Validation**: You can validate the token sent by the gateway in your API. This way, only valud requests coming from the gateway will be accepted.
+
+These methods are not mutually exclusive and you can use both of them to protect your API as shown in the following diagram.
+
+![Gateway protection](/images/gateway-ip-validation-overview.jpg)
+
+### IP Whitelisting
+
+The Kobble gateway will send requests to your API from the following IP addresses:
+
+- 34.70.245.93
+- 130.211.127.238
+- 34.72.87.26
+
+<Note>Note that these IP addresses can change overtime. Any change would be communicated by email and public announcement in our Discord community.</Note>
+
+
+### Token Validation
+
+The gateway will send a token with every request made to your API.
+
+To learn how to validate the token in your API, please refer to the token validation documentation.

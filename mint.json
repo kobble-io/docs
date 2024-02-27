@@ -73,6 +73,7 @@
             ]
         },
         "product/monetization",
+        "product/gateway",
         "product/analytics"
       ]
     },
