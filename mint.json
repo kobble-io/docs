@@ -49,7 +49,16 @@
     {
       "group": "Product",
       "pages": [
-        "product/customer-portal",
+        {
+          "group": "Customer Portal",
+          "icon": "Users",
+          "pages": [
+            "product/customer-portal/overview",
+            "product/customer-portal/branding",
+            "product/customer-portal/legal-info",
+            "product/customer-portal/custom-scripts"
+          ]
+        },
         {
           "group": "Authentication",
           "icon": "User",

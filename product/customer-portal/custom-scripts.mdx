@@ -1,0 +1,54 @@
+---
+title: Custom Scripts
+description: Inject custom HTML code into your portal page.
+---
+
+You can use custom scripts to add custom HTML, CSS, and JavaScript to your portal page.
+
+This can be useful for adding external scripts such as [Google Analytics](https://analytics.google.com/), [Crisp](https://crisp.chat/), [Intercom](https://www.intercom.com/), [Amplitude](https://amplitude.com/) and more.
+
+## Adding Custom Scripts
+
+To add custom scripts to your portal page, navigate to the [Custom Scripts](https://app.kobble.io/p/portal/scripts) section in your dashboard.
+
+Here you can add custom HTML, CSS, and JavaScript to your portal page, either before the end of the `</head>` tag or before the `</body>` tag.
+
+![Custom Scripts](./images/portal/custom-script.png)
+
+
+## Accessing user data
+
+When you add custom JavaScript to your portal page, you can access the `kobble` object which provides access to the **user** object.
+
+Here's the type definition for the `kobble` object.
+
+```typescript
+type KobbleWindowObject = {
+	user: {
+        id: string;
+        name: string | null;
+        email: string;
+        image: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        projectId: string;
+        stripeCustomerId: string | null;
+        products: {
+            id: string;
+            subscriptionId: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+    } | null;
+};
+```
+
+Here's an example of how you can access the `kobble` object from a custom html code (either from the Head or the Body code):
+
+```html
+<script type="text/javascript">
+    if (kobble.user) {
+        console.log(`Hello, your email is ${kobble.user.email}`);
+    }
+</script>
+```
