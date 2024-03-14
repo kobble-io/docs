@@ -89,7 +89,8 @@
     {
       "group": "Guides",
       "pages": [
-        "guides/best-practices"
+        "guides/best-practices",
+        "guides/crisp"
       ]
     }
   ],
