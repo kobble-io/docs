@@ -66,14 +66,14 @@ So you need to protect your API from direct requests.
 
 To do so, you can use the following methods:
 
-- **IP Whitelisting**: You can whitelist the gateway's IP addresses in your API. This way, only requests coming from the gateway will be accepted.
+- **IP Control list**: You can allow access to the gateway's IP addresses in your API. This way, only requests coming from the gateway will be accepted.
 - **Token Validation**: You can validate the token sent by the gateway in your API. This way, only valud requests coming from the gateway will be accepted.
 
 These methods are not mutually exclusive and you can use both of them to protect your API as shown in the following diagram.
 
 ![Gateway protection](/images/gateway-ip-validation-overview.jpg)
 
-### IP Whitelisting
+### IP Control list
 
 The Kobble gateway will send requests to your API from the following IP addresses:
 
