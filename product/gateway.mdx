@@ -46,6 +46,7 @@ Having all user requests go through the gateway allows us to provide you with al
 
 The gateway will send the following headers with every request made to your API:
 
+- **User-Agent**: KobbleGateway/x.x (x.x is the version of the gateway)
 - **X-Forwarded-Host**: the original host of the request (most likely the gateway's host)
 - **X-Forwarded-For**: the original IP address of the request (most likely the user's IP address)
 - **Kobble-Timestamp**: the unix timestamp of the request
