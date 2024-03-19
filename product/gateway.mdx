@@ -46,11 +46,15 @@ Having all user requests go through the gateway allows us to provide you with al
 
 The gateway will send the following headers with every request made to your API:
 
-- **Kobble-Timestamp**: the unix timestamp of the request
-- **Kobble-Real-Ip**: the user's IP address
 - **X-Forwarded-Host**: the original host of the request (most likely the gateway's host)
 - **X-Forwarded-For**: the original IP address of the request (most likely the user's IP address)
+- **Kobble-Timestamp**: the unix timestamp of the request
+- **Kobble-Real-Ip**: the user's IP address
+- **Kobble-User-Id**: the user's ID
+- **Kobble-Product-Id**: the Kobble product ID the user is subscribed to
 - **Authorization**: the Bearer token sent by the gateway (see [Token validation](#token-validation) for more information)
+
+<Note>We discourage you using the **Kobble-User-Id** and **Kobble-Product-Id** for sensitive operations since these headers are not signed. We suggest you use the information located in the Authorization token payload instead, since it's signed.</Note>
 
 ### Request body and query parameters
 
