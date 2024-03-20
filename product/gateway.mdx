@@ -104,25 +104,34 @@ The token will be a JWT token signed with a ES256 algorithm and containing the f
 
 ```json
 {
-  "aud": "<your_project_id>",
-  "exp": <expiration_timestamp>,
-  "iat": <issued_at_timestamp>,
+  "aud": "<project_id>",
+  "exp": 1710880079,
+  "iat": 1710876479,
   "iss": "gateway.kobble.io",
-  "sub": "<user_id>",
+  "sub": "cltql7ne40001qvtpwd09710o",
   "user": {
-    "email": "<user_email>",
-    "id": "<user_id>",
-    "name": "<user_name>" // can be null,
-    "subscription": {
-      "priceId": "<price_id>",
-      "productId": "<product_id>",
-      "quota": {
-        "interval": "MONTH", // "WEEK", "MONTH"
-        "limit": number,
-        "remaining": number,
-        "used": number
+    "email": "kevin@kobble.io",
+    "id": "cltql7ne40001qvtpwd09710o",
+    "name": null,
+    "products": [
+      {
+        "id": "cltqfre3u0004sl48zsmbm7ge",
+        "quotas": [
+          {
+            "id": "cltqlhk54000312gismvwvr75",
+            "limit": 100,
+            "name": "Requests per month",
+            "used": 5
+          },
+          {
+            "id": "cltwzvjgf000055bog72bv8pt",
+            "limit": 50,
+            "name": "Video generation per month",
+            "used": 10
+          }
+        ]
       }
-    }
+    ]
   }
 }
 ```
