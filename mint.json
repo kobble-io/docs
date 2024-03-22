@@ -25,7 +25,16 @@
     "name": "Dashboard",
     "url": "https://app.kobble.io"
   },
-  "tabs": [],
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
+    {
+      "name": "Libraries",
+      "url": "libraries"
+    }
+  ],
   "anchors": [
     {
       "name": "Community",
@@ -91,6 +100,25 @@
       "pages": [
         "guides/best-practices",
         "guides/crisp"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": [
+        "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "Endpoint Examples",
+      "pages": [
+        "api-reference/endpoint/ping"
+      ]
+    },
+    {
+      "group": "Libraries",
+      "pages": [
+        "libraries/nodejs",
+        "libraries/python"
       ]
     }
   ],

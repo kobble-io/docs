@@ -1,0 +1,290 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/ping": {
+      "get": {
+        "operationId": "AppController_ping",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/whoami": {
+      "get": {
+        "operationId": "AuthController_whoami",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "projectSlug": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "projectId",
+                    "projectSlug"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "sdk": []
+          }
+        ]
+      }
+    },
+    "/gateway/getPublicKey": {
+      "get": {
+        "operationId": "GatewayController_getProjectPublicKey",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pem": {
+                      "type": "string"
+                    },
+                    "algorithm": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "pem",
+                    "algorithm",
+                    "projectId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members/findUnique": {
+      "get": {
+        "operationId": "MembersController_findUniqueMember",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "isVerified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "createdAt",
+                    "isVerified"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members/list": {
+      "get": {
+        "operationId": "MembersController_listMembers",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "",
+    "description": "SDK Backend",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://sdk.kobble.io"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "sdk": {
+        "in": "header",
+        "type": "apiKey",
+        "name": "Kobble-Sdk-Secret"
+      }
+    },
+    "schemas": {
+      "PingResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "WhoamiResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "projectSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId",
+          "projectId",
+          "projectSlug"
+        ]
+      },
+      "GetProjectPublicKeyResponseDto": {
+        "type": "object",
+        "properties": {
+          "pem": {
+            "type": "string"
+          },
+          "algorithm": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pem",
+          "algorithm",
+          "projectId"
+        ]
+      },
+      "MemberDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "isVerified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "createdAt",
+          "isVerified"
+        ]
+      }
+    }
+  }
+}
