@@ -96,7 +96,8 @@
         },
         "product/monetization",
         "product/gateway",
-        "product/analytics"
+        "product/analytics",
+        "product/webhooks"
       ]
     },
     {

@@ -1,0 +1,126 @@
+---
+title: Webhooks
+description: React to important events in your project with webhooks.
+icon: 'bolt'
+---
+
+## Overview
+
+Webhooks allow you to react to important events in your project by sending HTTP POST requests to a URL you specify.
+
+For example, you can use webhooks to:
+- Update your CRM when a user signs up for your project.
+- Notify your team in Slack when a new user subscribes to a paid plan.
+- Keep your database in sync when a user is created or updated.
+
+![Webhooks examples](/images/webhooks-diagram.jpg)
+
+
+## Register a webhook
+
+To register a webhook:
+
+- Open the [Webhooks](https://app.kobble.io/p/webhooks) page in your dashboard.
+- Then click on **create a webhook**
+- Enter the URL of the endpoint that will receive the webhook requests.
+- Enter a description for you to remember what this webhook is for.
+- Select all the events you want to receive HTTP requests for.
+
+<Note>You can register as many webhook URLs as you want. Every webhook URL can handle one or more subscription.</Note>
+
+![Webhooks examples](/images/create-webhook.png)
+
+## Security considerations
+
+Every webhook request sent by Kobble will be signed with a secret key.
+
+It's crucial to validate the signature of the request to ensure that it was sent by Kobble and not by a malicious user.
+
+To validate the signature, you need to compare the signature sent in the `Kobble-Signature` header with the signature of the request body.
+
+The signature is a HMAC-SHA256 hash of the request body using the secret key as the key.
+
+### Get your secret key
+
+You can get your secret key in the webhook detail page.
+
+![Webhook detail](/images/webhook-detail-page.png)
+
+### Validate the signature
+
+To validate the signature, you need to compare the signature sent in the `Kobble-Signature` header with the signature of the request body.
+
+Here is an example of how to validate the signature in Node.js and Python:
+
+<CodeGroup>
+
+    ```typescript Node
+    import { createHmac } from 'crypto';
+
+    const isValidSignature = (
+        receivedBody: string,
+        receivedSignature: string,
+        secret: string): boolean =>
+    {
+        const secretBuffer = Buffer.from(secret, 'hex');
+        const generatedSignature = createHmac('sha256', secretBuffer)
+            .update(receivedBody)
+            .digest('hex');
+
+        return receivedSignature === generatedSignature;
+}
+    ```
+
+    ```python Python
+    import hmac
+    import hashlib
+
+    def is_valid_signature(received_body: str, received_signature: str, secret: str) -> bool:
+        secret_bytes = bytes.fromhex(secret)
+        generated_signature = hmac.new(secret_bytes, received_body.encode(), hashlib.sha256).hexdigest()
+
+        return received_signature == generated_signature
+    ```
+</CodeGroup>
+
+<Note>The [SDKs](/libraries/nodejs/quick-start) will soon provide a method to validate the signature for you.</Note>
+
+
+### Request Headers
+
+Kobble will always send the following headers with a webhook request:
+
+- **Kobble-Signature**: 'signature',
+- **Kobble-Signature-Algorithm**: sha256 by default
+- **User-Agent**: Kobble Webhooks/1.0
+
+
+## Test a webhook
+
+The easiest way to test a webhook is to use the **Send ping event** button located in the webhook detail page.
+
+![Webhooks ping](/images/webhook-ping-event.png)
+
+Then, you can check the result on the **latest deliveries** section.
+
+![Webhooks deliveries](/images/webhook-deliveries.png)
+
+<Note>If you want to test a webhook with a specific payload, the best way is to use the application as a user would do.</Note>
+
+## Retry policy
+
+Kobble will retry sending the webhook request up to 5 times if the server responds with a 5xx status code or if the request times out.
+
+The retry policy is exponential, starting with a delay of 10 seconds and doubling the delay for each retry.
+
+If the webhook request fails after 5 retries, Kobble will stop sending the request and mark the webhook as failed.
+
+## Delivery behavior
+
+Kobble will send the webhook request as soon as possible after the event occurs.
+
+The delivery behavior is defined as "at least once", meaning that Kobble will try to deliver the webhook request at least once.
+
+In rare cases, the webhook request may be delivered more than once due to network issues or race conditions.
+
+To handle this, you should make your webhook endpoint idempotent, meaning that it should be safe to call the endpoint multiple times with the same data.
