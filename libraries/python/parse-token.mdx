@@ -1,0 +1,48 @@
+---
+title: 'Parse token'
+---
+
+As explained in the [gateway section](/product/gateway), every request forwarded by the Gateway will contain a Bearer Token.
+
+This token is formed as a JWT and contains the user's information.
+
+The `parse_token` method helps you parse/verify this token and extract the user's information.
+
+If the token is valid, the method will return an object with the user's information.
+
+If the token is invalid, the method will throw an error.
+
+## Example usage
+
+```python
+payload = await kobble.gateway.parse_token(token)
+```
+
+## Return value
+
+If the token is valid, the function will return a promise of the payload matching the following type:
+
+```python
+@dataclass
+class TokenPayload:
+    project_id: str
+    user: TokenPayloadUser
+
+@dataclass
+class TokenPayloadUser:
+    id: str
+    email: Optional[str]
+    name: Optional[str]
+    products: List[TokenPayloadProduct]
+
+@dataclass
+class TokenPayloadProduct:
+    id: str
+    quotas: List[TokenPayloadQuota]
+
+@dataclass
+class TokenPayloadProduct:
+    id: str
+    quotas: List[TokenPayloadQuota]
+```
+

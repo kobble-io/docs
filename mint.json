@@ -25,7 +25,20 @@
     "name": "Dashboard",
     "url": "https://app.kobble.io"
   },
-  "tabs": [],
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
+    {
+      "name": "Node SDK",
+      "url": "libraries/nodejs"
+    },
+    {
+      "name": "Python SDK",
+      "url": "libraries/python"
+    }
+  ],
   "anchors": [
     {
       "name": "Community",
@@ -91,6 +104,58 @@
       "pages": [
         "guides/best-practices",
         "guides/crisp"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": [
+        "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "General",
+      "pages": [
+        "api-reference/endpoints/ping",
+        "api-reference/endpoints/whoami",
+        "api-reference/endpoints/get-public-key"
+      ]
+    },
+    {
+      "group": "Users",
+      "pages": [
+        "api-reference/endpoints/users/list",
+        "api-reference/endpoints/users/find-by-id",
+        "api-reference/endpoints/users/find-by-email"
+      ]
+    },
+    {
+      "group": "Get started",
+      "pages": [
+        "libraries/nodejs/quick-start"
+      ]
+    },
+    {
+      "group": "Gateway",
+      "pages": [
+        "libraries/nodejs/parse-token"
+      ]
+    },
+    {
+      "group": "Users",
+      "pages": [
+        "libraries/nodejs/users/list"
+      ]
+    },
+    {
+      "group": "Get started",
+      "pages": [
+        "libraries/python/quick-start"
+      ]
+    },
+    {
+      "group": "Gateway",
+      "pages": [
+        "libraries/python/parse-token"
       ]
     }
   ],

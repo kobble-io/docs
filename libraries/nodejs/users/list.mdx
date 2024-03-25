@@ -1,0 +1,48 @@
+---
+title: 'List'
+---
+
+You can retrieve all users using the `list` method.
+
+## Example usage
+
+```typescript
+import { Kobble } from '@kobbleio/admin'
+
+const main = async () => {
+    const kobble = new Kobble('YOUR_SECRET_KEY');
+    const users = await kobble.users.list({
+        limit: 10,
+        page: 1,
+    });
+
+    console.log(users);
+}
+```
+
+## Return value
+
+```json
+{
+  "hasNext": false,
+  "total": 2,
+  "page": 1,
+  "data": [
+    {
+      "id": "clty9iou1000lri9zxgccf28s",
+      "email": "kevin+1@kobble.io",
+      "createdAt": "2024-03-19T10:59:32.282Z",
+      "isVerified": true,
+      "name": null
+    },
+    {
+      "id": "cltyeunjt001bri9zixbpe7vn",
+      "email": "kevin@kobble.io",
+      "createdAt": "2024-03-19T13:28:48.569Z",
+      "isVerified": true,
+      "name": "Kevin Piacentini"
+    }
+  ],
+  "count": 2
+}
+```

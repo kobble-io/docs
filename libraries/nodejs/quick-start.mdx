@@ -1,0 +1,31 @@
+---
+title: 'Quick start'
+description: 'Learn how to integrate Kobble using the Node.js SDK.'
+---
+
+## Install
+
+Download the Node.js SDK using your favorite package manager.
+
+```bash
+npm install @kobbleio/admin
+```
+
+## Get your secret key
+
+You can obtain your secret key from [your dashboard](https://app.kobble.io/p/sdk/secrets).
+
+![Secret key page](./images/sdk-secret-page.png)
+
+## Test your integration
+
+```typescript
+import { Kobble } from '@kobbleio/admin'
+
+const main = async () => {
+    const kobble = new Kobble('YOUR_SECRET_KEY');
+    const whoami = await kobble.whoami();
+
+    console.log(whoami);
+}
+```
