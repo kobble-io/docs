@@ -103,14 +103,14 @@
         }
       }
     },
-    "/members/findUnique": {
+    "/users/findById/{userId}": {
       "get": {
         "operationId": "MembersController_findUniqueMember",
         "parameters": [
           {
             "name": "userId",
             "required": true,
-            "in": "query",
+            "in": "path",
             "schema": {
               "type": "string"
             }
@@ -155,7 +155,59 @@
         }
       }
     },
-    "/members/list": {
+    "/users/findByEmail/{userEmail}": {
+      "get": {
+        "operationId": "MembersController_findUniqueMemberByEmail",
+        "parameters": [
+          {
+            "name": "userEmail",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "isVerified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "createdAt",
+                    "isVerified"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/list": {
       "get": {
         "operationId": "MembersController_listMembers",
         "parameters": [

@@ -31,8 +31,12 @@
       "url": "api-reference"
     },
     {
-      "name": "Libraries",
-      "url": "libraries"
+      "name": "Node SDK",
+      "url": "libraries/nodejs"
+    },
+    {
+      "name": "Python SDK",
+      "url": "libraries/python"
     }
   ],
   "anchors": [
@@ -109,16 +113,49 @@
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "General",
       "pages": [
-        "api-reference/endpoint/ping"
+        "api-reference/endpoints/ping",
+        "api-reference/endpoints/whoami",
+        "api-reference/endpoints/get-public-key"
       ]
     },
     {
-      "group": "Libraries",
+      "group": "Users",
       "pages": [
-        "libraries/nodejs",
-        "libraries/python"
+        "api-reference/endpoints/users/list",
+        "api-reference/endpoints/users/find-by-id",
+        "api-reference/endpoints/users/find-by-email"
+      ]
+    },
+    {
+      "group": "Get started",
+      "pages": [
+        "libraries/nodejs/quick-start"
+      ]
+    },
+    {
+      "group": "Gateway",
+      "pages": [
+        "libraries/nodejs/parse-token"
+      ]
+    },
+    {
+      "group": "Users",
+      "pages": [
+        "libraries/nodejs/users/list"
+      ]
+    },
+    {
+      "group": "Get started",
+      "pages": [
+        "libraries/python/quick-start"
+      ]
+    },
+    {
+      "group": "Gateway",
+      "pages": [
+        "libraries/python/parse-token"
       ]
     }
   ],
