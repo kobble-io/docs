@@ -104,7 +104,8 @@
       "group": "Guides",
       "pages": [
         "guides/best-practices",
-        "guides/crisp"
+        "guides/crisp",
+        "guides/monetize-gpt"
       ]
     },
     {
