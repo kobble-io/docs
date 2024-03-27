@@ -94,7 +94,14 @@
               }
             ]
         },
-        "product/monetization",
+        {
+          "group": "Monetization",
+          "icon": "money-bills",
+          "pages": [
+            "product/monetization/overview",
+            "product/monetization/quotas"
+          ]
+        },
         "product/gateway",
         "product/analytics",
         "product/webhooks"

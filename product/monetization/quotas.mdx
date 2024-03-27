@@ -1,0 +1,92 @@
+---
+title: Quotas
+---
+
+You can configure one or more quotas per product to limit the usage of your products.
+
+For example, you can set a quota of:
+- 100 requests per month for members on the free plan
+- 1000 requests per month for members on the premium plan
+
+<Note>
+    By default, if no quotas are set, your customers will be able to use your products with no limit.
+</Note>
+
+
+To set a quota, go to the product of your choice and scroll to the quota section.
+
+Click on create quota and fill in the form.
+
+![Quota Creation](/images/quota-creation.jpeg)
+
+## Increment behavior
+
+There are two increment behaviors available:
+- Automatic (by default)
+- Manual
+
+### Automatic
+When set to Automatic, Kobble will automatically increment your user's usage by 1 each time a request is made.
+
+This behavior is convenient for most request based use cases.
+
+### Manual
+
+In some scenarios you may want to charge your users based on something else such as:
+
+- the number of tokens consumed by a request
+- the number of minutes of video processed
+- the number of profile a user scraped
+
+For these cases, you can set the increment behavior to Manual.
+
+When set to Manual, you will need to specify manually to Kobble by how much to increment the usage each time a request is made.
+
+To do so, you can set the `Kobble-Increment-Usage` header in the response of your API with the following format:
+
+```HTTP
+Kobble-Increment-Usage: <quota_id>=<signed_integer>
+```
+
+You can increment multiple quotas at once by separating them with a semicolon:
+
+```HTTP
+Kobble-Increment-Usage: <quota_id>=<signed_integer>;<quota_id_2>=<signed_integer_2>
+```
+
+For example, if you want to increment the quota with the id `my_awesome_quota` by 50 units, you can set the header as follows:
+
+```HTTP
+Kobble-Increment-Usage: my_awesome_quota=50
+```
+
+<Note>The increment value is an signed integer, which means -10 and 10 are valid values but 2.5 is not. If you want to deal with durations, you can express them in seconds or milliseconds to deal with integers instead of floats.</Note>
+
+## Blocking behavior
+
+As for the increment behavior, there are two blocking behaviors available:
+- Automatic (by default)
+- Manual
+
+### Automatic
+
+When set to Automatic, Kobble will automatically block the user from making requests when the quota is reached.
+
+This behavior is convenient for most request based use cases.
+
+It's possible to combine it with a manual increment behavior, although it's probably not what you want to do.
+
+
+### Manual
+
+In some scenarios, you may want to handle the blocking yourself.
+
+This is particularly handy when you cannot guess the usage of a request in advance.
+
+Let's say you have a quota of 100 minutes of video processing per month.
+
+When a user makes a request, Kobble cannot know in advance how many minutes of video will be processed.
+
+So in this kind of scenario, you can set the blocking behavior to Manual and decide to block the user yourself when the quota is reached.
+
+<Note>To know if a user has reached a quota, you can check the current user's usage sent by Kobble in the request (see [Request Token Authorization](/product/gateway#token-validation)).</Note>
