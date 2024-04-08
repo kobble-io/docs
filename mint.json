@@ -53,10 +53,21 @@
   ],
   "navigation": [
     {
-      "group": "Get Started",
+        "group": "Home",
+        "pages": [
+            "introduction"
+        ]
+    },
+    {
+      "group": "Learning",
       "pages": [
-        "introduction",
-        "quickstart"
+        "learning/quickstart/setup",
+        {
+          "group": "Frontend",
+            "pages": [
+                "learning/quickstart/vuejs"
+            ]
+        }
       ]
     },
     {
@@ -105,12 +116,6 @@
         "product/gateway",
         "product/analytics",
         "product/webhooks"
-      ]
-    },
-    {
-      "group": "Starter Kits",
-      "pages": [
-        "starter-kits/vue"
       ]
     },
     {
