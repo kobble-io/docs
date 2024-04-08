@@ -62,12 +62,7 @@
       "group": "Learning",
       "pages": [
         "learning/quickstart/setup",
-        {
-          "group": "Frontend",
-            "pages": [
-                "learning/quickstart/vuejs"
-            ]
-        }
+        "learning/quickstart/vuejs"
       ]
     },
     {
