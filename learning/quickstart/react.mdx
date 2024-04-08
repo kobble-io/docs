@@ -1,0 +1,214 @@
+---
+title: React quickstart
+description: Add authentication to your React application in under 10 minutes using Kobble SDK.
+icon: 'React'
+---
+
+## You will learn how to:
+
+- Create a new React application using Vite
+- Configure `@kobbleio/auth-spa-js` SDK
+- Protect your application routes
+
+<Note>Pre-requisites: You need to [set up your Kobble account](/learning/quickstart/setup) before starting this guide.</Note>
+
+## Example repository
+
+[![React Auth Example](/images/react-auth-example-banner.png)](https://github.com/kobble-io/react-auth-example)
+
+This is a simple React starter project that demonstrates how to implement authentication in a React application.
+
+It uses react-router, pinia, tailwind and [@kobbleio/auth-spa-js SDK](https://www.npmjs.com/package/@kobbleio/auth-spa-js) to manage the authentication state of the application.
+
+Check our the repository for more information:
+
+- [**Repository**](https://github.com/kobble-io/react-auth-example)
+- [**Demo**](https://kobble-react-auth-example.vercel.app)
+
+## Getting started
+
+<Steps>
+    <Step title="Create your React application">
+        Scaffold your new React application using [Vite](https://vitejs.dev/guide/).
+
+        <CodeGroup>
+
+            ```bash npm
+            npm create vite@latest my-react-app -- --template react-ts
+            cd my-react-app
+            npm install
+            npm run dev
+            ```
+
+            ```bash yarn
+            yarn create vite@latest my-react-app -- --template react-ts
+            cd my-react-app
+            yarn install
+            yarn run dev
+            ```
+
+            ```bash npm
+            pnpm create vite@latest my-react-app -- --template react-ts
+            cd my-react-app
+            pnpm install
+            pnpm run dev
+            ```
+        </CodeGroup>
+    </Step>
+    <Step title="Install @kobbleio/auth-spa-js">
+        Our auth SDK for SPAs helps you to easily authenticate your users in your React application and manage their session.
+
+        <CodeGroup>
+            ```bash npm
+            npm install @kobbleio/auth-spa-js
+            ```
+
+            ```bash yarn
+            yarn add @kobbleio/auth-spa-js
+            ```
+
+            ```bash pnpm
+            pnpm add @kobbleio/auth-spa-js
+            ```
+        </CodeGroup>
+    </Step>
+    <Step title="Initialize the SDK">
+        Create a file `src/kobble/index.ts` where you will initialize the SDK and export the Kobble instance.
+
+        ```typescript
+        // src/kobble/index.ts
+
+        import { createKobbleClient } from '@kobbleio/auth-spa-js'
+
+        export const kobbleClient = createKobbleClient({
+            domain: import.meta.env.VITE_KOBBLE_DOMAIN,
+            clientId: import.meta.env.VITE_KOBBLE_CLIENT_ID,
+            redirectUri: import.meta.env.VITE_KOBBLE_REDIRECT_URI
+        })
+        ```
+    </Step>
+    <Step title="Setup the environment variables">
+        Create a `.env` file at the root of your project and add the following environment variables.
+
+        ```env
+        VITE_KOBBLE_DOMAIN=https://your-project.portal.kobble.io
+        VITE_KOBBLE_CLIENT_ID=your-client-id
+        VITE_KOBBLE_REDIRECT_URI=http://localhost:3000/callback
+        ```
+
+        <Note>**KOBBLE_DOMAIN** and **KOBBLE_CLIENT_ID** can be found in [the Kobble Application we created earlier](/learning/quickstart/setup). The **REDIRECT_URI** must match the callback route we're going to configure in the next step of this tutorial.</Note>
+    </Step>
+    <Step title="Create a callback handler">
+        Install and configure [React Router](https://reactrouter.com/en/main/start/overview).
+
+        <Note>If you're not familiar with React Router, you can check our router configuration [here](https://github.com/kobble-io/react-auth-example/blob/main/src/router.tsx).</Note>
+
+        Then create a new page view to handle our callback `src/pages/Callback.tsx`.
+
+        Use the Kobble client to handle the callback and redirect the user to the home page on page mount.
+
+        ```typescript
+        // src/pages/Callback.tsx
+        import React, { useEffect } from 'react';
+        import { useNavigate } from 'react-router-dom';
+        import { kobbleClient } from '../kobble';
+
+        const Callback: React.FC = () => {
+            const navigate = useNavigate();
+
+            useEffect(() => {
+                const authenticate = async () => {
+                    try {
+                        await kobbleClient.handleRedirectCallback();
+                        navigate('/', {
+                            replace: true,
+                        });
+                    } catch (e: any) {
+                        console.log(e.message);
+                    }
+                };
+                authenticate();
+            }, [navigate]);
+
+            return (...Your JSX...)
+        };
+
+        export default Callback;
+        ```
+    </Step>
+    <Step title="Use the loginWithRedirect method">
+        Then we can use the `loginWithRedirect` method to trigger the login flow.
+
+        For example with a simple button:
+
+        ```typescript
+        import { kobbleClient } from '../kobble'
+
+        const login = () => {
+            kobbleClient.loginWithRedirect();
+        };
+
+        return (
+            <button onClick={login}>Login</button>
+        );
+        ```
+    </Step>
+    <Step title="Going further">
+        At this stage, you have successfully added authentication to your React application using Kobble SDK.
+
+        Now you can use all methods provided by our SDK to protect your routes, get the user profile, listen to the user state changes and more.
+
+        Here are some useful examples:
+
+        ```typescript
+        import { kobbleClient } from '../kobble'
+
+        // In an async function
+        const user = await kobbleClient.getUser()
+
+        const isAuthenticated = await kobbleClient.isAuthenticated()
+
+        const accessToken = await kobbleClient.getAccessToken()
+
+        const idToken = await kobbleClient.getIdToken()
+
+        await kobbleClient.logout()
+        ```
+
+        You can also listen to the user state changes:
+
+        ```typescript
+        import { kobbleClient } from '../kobble'
+
+        const [user, setUser] = useState<User | null>(null);
+        const [actionResult, setActionResult] = useState<any>(null);
+
+        const isAuthenticated = !!user;
+
+        useEffect(() => {
+            const fetchUser = async () => {
+                const user = await kobbleClient.getUser();
+                setUser(user);
+            }
+
+            /**
+             * We fetch and store the user state on page load.
+             */
+            fetchUser();
+
+            /**
+             * We update the user state when it's updated.
+             */
+            kobbleClient.onAuthStateChanged((data) => {
+                // Handle user state change as needed
+                // For example, update the user object in the store
+                setUser(data.user);
+            })
+        }, [])
+        ```
+    </Step>
+</Steps>
+
+#### 🎉 You made it!
+
+You have successfully added authentication to your React application using Kobble SDK.

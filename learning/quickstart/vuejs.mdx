@@ -121,7 +121,7 @@ Check our the repository for more information:
         }
         ```
     </Step>
-    <Step title="Use the login method">
+    <Step title="Use the loginWithRedirect method">
         Then we can use the `loginWithRedirect` method to redirect the user to the Kobble login page whenever we want to authenticate the user.
 
         For example with a simple button:
@@ -158,6 +158,7 @@ Check our the repository for more information:
     const accessToken = await kobbleClient.getAccessToken()
 
     const idToken = await kobbleClient.getIdToken()
+
     await kobbleClient.logout()
     ```
 
