@@ -63,7 +63,14 @@
       "pages": [
         "learning/quickstart/setup",
         "learning/quickstart/vuejs",
-        "learning/quickstart/react"
+        "learning/quickstart/react",
+        {
+          "group": "Integrations",
+          "icon": "Plug",
+          "pages": [
+            "learning/quickstart/supabase"
+          ]
+        }
       ]
     },
     {
