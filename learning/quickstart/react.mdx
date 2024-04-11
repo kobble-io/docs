@@ -7,7 +7,7 @@ icon: 'React'
 ## You will learn how to:
 
 - Create a new React application using Vite
-- Configure `@kobbleio/auth-spa-js` SDK
+- Configure `@kobbleio/react` SDK
 - Protect your application routes
 
 <Note>Pre-requisites: You need to [set up your Kobble account](/learning/quickstart/setup) before starting this guide.</Note>
@@ -18,14 +18,19 @@ icon: 'React'
 
 This is a simple React starter project that demonstrates how to implement authentication in a React application.
 
-It uses react-router, pinia, tailwind and [@kobbleio/auth-spa-js SDK](https://www.npmjs.com/package/@kobbleio/auth-spa-js) to manage the authentication state of the application.
+It uses react-router, pinia, tailwind and [@kobbleio/react(https://www.npmjs.com/package/@kobbleio/auth-spa-js) SDK to manage the authentication state of the application.
 
 Check our the repository for more information:
 
 - [**Repository**](https://github.com/kobble-io/react-auth-example)
 - [**Demo**](https://kobble-react-auth-example.vercel.app)
 
+
 ## Getting started
+
+<Note>
+    This guide uses our @kobbleio/react SDK. To use a lower-level SDK such as @kobbleio/auth-spa-js, check our [React SPA quickstart guide](/learning/quickstart/react-auth-spa-js).
+</Note>
 
 <Steps>
     <Step title="Create your React application">
@@ -55,36 +60,46 @@ Check our the repository for more information:
             ```
         </CodeGroup>
     </Step>
-    <Step title="Install @kobbleio/auth-spa-js">
-        Our auth SDK for SPAs helps you to easily authenticate your users in your React application and manage their session.
+    <Step title="Install @kobbleio/react">
+        Our auth SDK for React helps you to easily authenticate your users in your React application and manage their session. It also provides a set of methods, hooks and components to help you protect your routes and manage the user state.
 
         <CodeGroup>
             ```bash npm
-            npm install @kobbleio/auth-spa-js
+            npm install @kobbleio/react
             ```
 
             ```bash yarn
-            yarn add @kobbleio/auth-spa-js
+            yarn add @kobbleio/react
             ```
 
             ```bash pnpm
-            pnpm add @kobbleio/auth-spa-js
+            pnpm add @kobbleio/react
             ```
         </CodeGroup>
     </Step>
-    <Step title="Initialize the SDK">
-        Create a file `src/kobble/index.ts` where you will initialize the SDK and export the Kobble instance.
+    <Step title="Use the KobbleProvider">
+        To use the SDK, you must wrap your App component with the `KobbleProvider` component.
 
-        ```typescript
-        // src/kobble/index.ts
+        Here's an example that also uses React Router:
 
-        import { createKobbleClient } from '@kobbleio/auth-spa-js'
+       ```tsx
+        import ReactDOM from 'react-dom/client';
+        import './index.css';
+        import { router } from "./router";
+        import { RouterProvider } from "react-router-dom";
+        import { KobbleProvider } from "@kobbleio/react";
 
-        export const kobbleClient = createKobbleClient({
-            domain: import.meta.env.VITE_KOBBLE_DOMAIN,
-            clientId: import.meta.env.VITE_KOBBLE_CLIENT_ID,
-            redirectUri: import.meta.env.VITE_KOBBLE_REDIRECT_URI
-        })
+        const root = ReactDOM.createRoot(
+            document.getElementById('root') as HTMLElement
+        )
+
+        root.render(
+        <KobbleProvider domain={import.meta.env.VITE_KOBBLE_DOMAIN}
+                        clientId={import.meta.env.VITE_KOBBLE_CLIENT_ID}
+                        redirectUri={import.meta.env.VITE_KOBBLE_REDIRECT_URI}>
+            <RouterProvider router={router} />
+        </KobbleProvider>
+        );
         ```
     </Step>
     <Step title="Setup the environment variables">
@@ -105,106 +120,131 @@ Check our the repository for more information:
 
         Then create a new page view to handle our callback `src/pages/Callback.tsx`.
 
-        Use the Kobble client to handle the callback and redirect the user to the home page on page mount.
+        Use the `<HandleCallback />` component to handle the callback and redirect the user to the home page automatically.
 
-        ```typescript
+        ```tsx
         // src/pages/Callback.tsx
-        import React, { useEffect } from 'react';
+        import React, { useState } from 'react';
         import { useNavigate } from 'react-router-dom';
-        import { kobbleClient } from '../kobble';
+        import { HandleCallback } from "@kobbleio/react";
 
         const Callback: React.FC = () => {
+            const [error, setError] = useState<string | null>(null);
             const navigate = useNavigate();
 
-            useEffect(() => {
-                const authenticate = async () => {
-                    try {
-                        await kobbleClient.handleRedirectCallback();
-                        navigate('/', {
-                            replace: true,
-                        });
-                    } catch (e: any) {
-                        console.log(e.message);
-                    }
-                };
-                authenticate();
-            }, [navigate]);
-
-            return (...Your JSX...)
+            return (
+                <HandleCallback navigate={navigate} afterSignInUrl={'/'} onError={(message) => setError(message)}>
+                    {error && <span>An error occurred: {error}</span>
+                </HandleCallback>
+            );
         };
 
         export default Callback;
         ```
     </Step>
-    <Step title="Use the loginWithRedirect method">
-        Then we can use the `loginWithRedirect` method to trigger the login flow.
+    <Step title="Handling user state">
+        The SDK exposes multiple hooks and components to handle authentication.
 
-        For example with a simple button:
+        You can use the `useAuth` hook to get the user state and the `LoginButton` component to trigger the login process.
 
-        ```typescript
-        import { kobbleClient } from '../kobble'
+        First, we can use the `<SignedIn />` and `<SignedOut />` components to show different content based on the user's authentication state.
 
-        const login = () => {
-            kobbleClient.loginWithRedirect();
-        };
+        ```tsx
+        import { SignedIn, SignedOut, useAuth } from '@kobbleio/react';
 
-        return (
-            <button onClick={login}>Login</button>
-        );
+        const MyPage: React.FC = () => {
+            const { user } = useAuth();
+
+            return (
+                <div>
+                    <SignedIn>
+                        <p>Welcome, {user.name}</p>
+                    </SignedIn>
+
+                    <SignedOut>
+                        <p>You must login</p>
+                    </SignedOut>
+                </div>
+            )
+        }
         ```
     </Step>
-    <Step title="Going further">
-        At this stage, you have successfully added authentication to your React application using Kobble SDK.
+    <Step title="Login and Logout components">
+        To trigger a login or logout flow, you can simply use our `<LoginButton />` and `<LogoutButton />` components.
 
-        Now you can use all methods provided by our SDK to protect your routes, get the user profile, listen to the user state changes and more.
+        ```tsx
+        import { SignedIn, SignedOut, useAuth, LoginButton, LogoutButton } from '@kobbleio/react';
+
+        const MyPage: React.FC = () => {
+            const { user } = useAuth();
+
+            return (
+                <div>
+                    <SignedIn>
+                            <p>Welcome, {user.name}</p>
+                            <LogoutButton />
+                    </SignedIn>
+
+                    <SignedOut>
+                        <p>You must login</p>
+                        <LoginButton />
+                    </SignedOut>
+                </div>
+            )
+        }
+        ```
+
+        There's no need to pass any handlers to these components, they will handle everything for you.
+
+        **Customize your buttons:**
+
+        By default, these buttons will render as simple buttons. You can customize them by passing a child prop.
+
+        ```tsx
+        <LoginButton>
+            <button className="rounded-full border border-[#236456] bg-[#112220] text-[#33C6AB] py-1 px-3">
+                Login
+            </button>
+        </LoginButton>
+        ```
+
+        Again, no need to pass any handler to the button, it will handle everything for you.
+    </Step>
+
+    <Step title="Going further">
+        At this stage, you have successfully added authentication to your React application using **[Kobble](https://kobble.io)** SDK.
+
+        Now you can use all methods provided by the Kobble Provider to protect your routes, get the user profile, listen to the user state changes and more.
 
         Here are some useful examples:
 
         ```typescript
-        import { kobbleClient } from '../kobble'
+        const { kobble } = useKobble();
+        const { user, isAuthenticated } = useAuth();
 
         // In an async function
-        const user = await kobbleClient.getUser()
+        const user = await kobble.getUser()
 
-        const isAuthenticated = await kobbleClient.isAuthenticated()
+        const accessToken = await kobble.getAccessToken()
 
-        const accessToken = await kobbleClient.getAccessToken()
+        const idToken = await kobble.getIdToken()
 
-        const idToken = await kobbleClient.getIdToken()
+        const supabaseToken = await kobble.getSupabaseToken()
 
-        await kobbleClient.logout()
+        await kobble.loginWithRedirect()
+
+        await kobble.logout
         ```
 
         You can also listen to the user state changes:
 
         ```typescript
-        import { kobbleClient } from '../kobble'
+        import { useAuthStateChanged } from '@kobbleio/react';
 
-        const [user, setUser] = useState<User | null>(null);
-        const [actionResult, setActionResult] = useState<any>(null);
-
-        const isAuthenticated = !!user;
-
-        useEffect(() => {
-            const fetchUser = async () => {
-                const user = await kobbleClient.getUser();
-                setUser(user);
-            }
-
-            /**
-             * We fetch and store the user state on page load.
-             */
-            fetchUser();
-
-            /**
-             * We update the user state when it's updated.
-             */
-            kobbleClient.onAuthStateChanged((data) => {
-                // Handle user state change as needed
-                // For example, update the user object in the store
-                setUser(data.user);
-            })
-        }, [])
+        useAuthStateChanged((data) => {
+            // Handle user state change as needed
+            console.log(data.user) // null | User
+        })
         ```
     </Step>
 </Steps>
@@ -212,3 +252,5 @@ Check our the repository for more information:
 #### 🎉 You made it!
 
 You have successfully added authentication to your React application using Kobble SDK.
+
+You can find a complete example of this tutorial in the [React Auth Example repository](https://github.com/kobble-io/react-auth-example).
