@@ -1,0 +1,401 @@
+---
+title: React
+description: Learn how to add authentication to your React application using Kobble SDK.
+icon: 'React'
+---
+
+<Note>Pre-requisites: You need to [set up your Kobble account](/learning/quickstart/setup).</Note>
+
+## Install the SDK
+
+<Steps>
+    <Step title="Install @kobbleio/react">
+        Install the @kobbleio/react sdk with the provider of your choice.
+
+        <CodeGroup>
+            ```bash npm
+            npm install @kobbleio/react
+            ```
+
+            ```bash yarn
+            yarn add @kobbleio/react
+            ```
+
+            ```bash pnpm
+            pnpm add @kobbleio/react
+            ```
+        </CodeGroup>
+    </Step>
+    <Step title="Use the KobbleProvider">
+        To use the SDK, you must wrap your App component with the `KobbleProvider` component.
+
+        Here's an example that also uses React Router:
+
+        ```tsx
+        import ReactDOM from 'react-dom/client';
+        import './index.css';
+        import { router } from "./router";
+        import { RouterProvider } from "react-router-dom";
+        import { KobbleProvider } from "@kobbleio/react";
+
+        const root = ReactDOM.createRoot(
+        document.getElementById('root') as HTMLElement
+        )
+
+        root.render(
+        <KobbleProvider domain={import.meta.env.VITE_KOBBLE_DOMAIN}
+                        clientId={import.meta.env.VITE_KOBBLE_CLIENT_ID}
+                        redirectUri={import.meta.env.VITE_KOBBLE_REDIRECT_URI}>
+            <RouterProvider router={router} />
+        </KobbleProvider>
+        );
+        ```
+    </Step>
+    <Step title="Setup the environment variables">
+        Create a `.env` file at the root of your project and add the following environment variables.
+
+        ```env
+        VITE_KOBBLE_DOMAIN=https://your-project.portal.kobble.io
+        VITE_KOBBLE_CLIENT_ID=your-client-id
+        VITE_KOBBLE_REDIRECT_URI=http://localhost:3000/callback
+        ```
+
+        <Note>**KOBBLE_DOMAIN** and **KOBBLE_CLIENT_ID** can be found in your Kobble dashboard.</Note>
+    </Step>
+    <Step title="Create a callback handler">
+        Install and configure [React Router](https://reactrouter.com/en/main/start/overview).
+
+        <Note>If you're not familiar with React Router, you can check our router configuration [here](https://github.com/kobble-io/react-auth-example/blob/main/src/router.tsx).</Note>
+
+        Then create a new page view to handle our callback `src/pages/Callback.tsx`.
+
+        Use the `<HandleCallback />` component to handle the callback and redirect the user to the home page automatically.
+
+        ```tsx
+        // src/pages/Callback.tsx
+        import React, { useState } from 'react';
+        import { useNavigate } from 'react-router-dom';
+        import { HandleCallback } from "@kobbleio/react";
+
+        const Callback: React.FC = () => {
+        const [error, setError] = useState<string | null>(null);
+        const navigate = useNavigate();
+
+        return (
+            <HandleCallback navigate={navigate} afterSignInUrl={'/'} onError={(message) => setError(message)}>
+                {error && <span>An error occurred: {error}</span>
+            </HandleCallback>
+            );
+        };
+
+        export default Callback;
+        ```
+    </Step>
+</Steps>
+
+## Hooks
+
+The SDK exposes many hooks that you can use to interact with the authentication state of your application.
+
+### useAuth()
+
+The `useAuth` hook allows you to get the authentication state of the user. Instead of using the `kobble` client instance, you can directly get the user object from the react context.
+
+```tsx
+import { useAuth } from "@kobbleio/react";
+
+const { user, isAuthenticated } = useAuth();
+```
+
+### useAuthStateChanged()
+
+The `useAuthStateChanged` hook allows you to listen for changes in the authentication state of the user.
+
+The callback function will be called with the user object when the user is signed in, and `null` when the user is signed out.
+
+<Note>The callback may be called multiple times. For instance when you refresh the page it will be initially called with a `null` user and then the `User` object if authenticated.</Note>
+
+```tsx
+import { useAuthStateChanged } from "@kobbleio/react";
+
+useAuthStateChanged((user) => {
+    // user can be null or a User object
+    console.log('Auth state changed', user);
+});
+```
+
+### useAccessControl()
+
+The `useAccessControl` hook allows you to check if the user has the required permissions or quotas to access a specific resource.
+
+<Note>You must attribute quotas and/or permissions to your Products from your [Kobble dashboard](https://app.kobble.io) for them to work.</Note>
+
+#### Check permissions
+
+```tsx
+import { useAccessControl } from "@kobbleio/react";
+const { hasPermission } = useAccessControl();
+
+const canGenerateImage = async () => {
+    return hasPermission('generate-image');
+}
+```
+
+#### Check remaining quotas
+
+```tsx
+import { useAccessControl } from "@kobbleio/react";
+const { hasRemainingQuota } = useAccessControl();
+
+const canGenerateImage = async () => {
+    return hasRemainingQuota('image-generated');
+}
+```
+
+### useKobble()
+
+The `useKobble` hook allows you to get the `kobble` client instance that exposes various utility methods.
+
+#### Get user state
+
+<Note>Even if you can do it using the Kobble instance we suggest you do it using the `useAuth` hook explained above.</Note>
+
+```tsx
+import { useKobble } from "@kobbleio/react";
+
+const { kobble } = useKobble();
+
+const anything = async () => {
+    const user = await kobble.getUser();
+    const isAuthenticated = await kobble.isAuthenticated();
+};
+```
+
+#### Get access and ID tokens
+
+```tsx
+import { useKobble } from "@kobbleio/react";
+
+const { kobble } = useKobble();
+
+const anything = async () => {
+    const accessToken = await kobble.getAccessToken();
+    const idToken = await kobble.getIdToken();
+};
+```
+
+#### Listen for state changes
+
+The `onAuthStateChanged` method allows you to listen for changes in the authentication state of the user.
+
+The callback function will be called with the user object when the user is signed in, and `null` when the user is signed out.
+
+<Note>The callback may be called multiple times. For instance when you refresh the page it will be initially called with a `null` user and then the `User` object if authenticated.</Note>
+
+```tsx
+import { useKobble } from "@kobbleio/react";
+const { kobble } = useKobble();
+
+kobble.onAuthStateChanged((user) => {
+    // user can be null or a User object
+    console.log('Auth state changed', user);
+});
+```
+
+
+## Components
+
+The SDK exposes a few components that you can use to interact with the authentication state of your application seemlessly.
+
+
+### `<SignedIn>`
+
+The `<SignedIn>` component allows you to show content only when the user is signed in.
+
+```tsx
+import { SignedIn, useAuth } from "@kobbleio/react";
+
+const { user } = useAuth();
+
+<SignedIn>
+    <span>Welcome back, {user.name}</span>
+</SignedIn>
+```
+
+### `<SignedOut>`
+
+The `<SignedOut>` component allows you to show content only when the user is signed out.
+
+```tsx
+import { SignedOut } from "@kobbleio/react";
+
+<SignedOut>
+    <span>Sign in to access more features</span>
+</SignedOut>
+```
+
+### `<LoginButton>`
+
+The `<LoginButton>` component allows you to show a button that triggers the login flow and redirects the user to your authentication portal.
+
+You can use the component as it or pass it a child to customize it.
+
+**Default usage:**
+
+```tsx
+import { LoginButton, SignedOut } from "@kobbleio/react";
+
+<SignedOut>
+    <LoginButton />
+</SignedOut>
+```
+
+**Custom usage:**
+
+```tsx
+import { LoginButton, SignedOut } from "@kobbleio/react";
+
+<SignedOut>
+    <LoginButton>
+        <button className="your-class-or-any-other-attribue">Login</button>
+    </LoginButton>
+</SignedOut>
+```
+
+<Note>The onClick event will automatically get handled by the SDK, don't pass any handler.</Note>
+
+### `<LogoutButton>`
+
+The `<LogoutButton>` component allows you to show a button that triggers the logout flow.
+
+You can use the component as it or pass it a child to customize it.
+
+**Default usage:**
+
+```tsx
+import { LogoutButton, SignedIn } from "@kobbleio/react";
+
+<SignedIn>
+    <LogoutButton />
+</SignedIn>
+```
+
+**Custom usage:**
+
+```tsx
+import { LogoutButton, SignedIn } from "@kobbleio/react";
+
+<SignedIn>
+    <LogoutButton>
+        <button className="your-class-or-any-other-attribue">Logout</button>
+    </LogoutButton>
+</SignedIn>
+```
+
+<Note>The onClick event will automatically get handled by the SDK, don't pass any handler.</Note>
+
+
+### `<IsAllowed>`
+
+The `<IsAllowed>` component allows you to show content only when the user has the required permissions or quotas to access a specific resource.
+
+It takes a `permission` or `quota` prop that you can use to check if the user has the required permissions or quotas.
+
+Both `permission` and `quota` props can be either a string or an array of strings.
+
+```tsx
+import { IsAllowed } from "@kobbleio/react";
+
+<IsAllowed permission="generate-image">
+    <button>Generate Image</button>
+</IsAllowed>
+```
+
+```tsx
+import { IsAllowed } from "@kobbleio/react";
+
+<IsAllowed quota="image-generated">
+    <button>Generate Image</button>
+</IsAllowed>
+```
+
+### `<IsForbidden>`
+
+The `<IsForbidden>` component allows you to show content only when the user doesn't have the required permissions or quotas to access a specific resource.
+
+It takes a `permission` or `quota` prop that you can use to check if the user doesn't have the required permissions or quotas.
+
+Both `permission` and `quota` props can be either a string or an array of strings.
+
+```tsx
+import { IsForbidden } from "@kobbleio/react";
+
+<IsForbidden permission="generate-image">
+    <span>Sorry, you don't have the required permissions to generate an image</span>
+</IsForbidden>
+```
+
+```tsx
+import { IsForbidden } from "@kobbleio/react";
+
+<IsForbidden quota="image-generated">
+    <span>Sorry, you've reached the maximum number of images you can generate</span>
+</IsForbidden>
+```
+
+### `<ProfileLink>`
+
+The `<ProfileLink>` component allows you to show a link to the user's profile of your Customer Portal.
+
+It must take a child that will be used as the link text.
+
+```tsx
+import { ProfileLink, SignedIn } from "@kobbleio/react";
+
+this
+
+<SignedIn>
+    <ProfileLink>My Profile</ProfileLink>
+</SignedIn>
+```
+
+### `<PricingLink>`
+
+The `<PricingLink>` component allows you to show a link to the pricing page of your Customer Portal.
+
+It must take a child that will be used as the link text.
+
+```tsx
+import { PricingLink } from "@kobbleio/react";
+
+<PricingLink>View Pricing</PricingLink>
+```
+
+### `<HandleCallback>`
+
+The `<HandleCallback>` component allows you to handle the callback from the authentication portal and redirect the user to the desired page.
+
+It takes a `navigate` prop that you can use to redirect the user to the desired page after the callback is handled.
+
+```tsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { HandleCallback } from '@kobbleio/react';
+
+const Callback: React.FC = () => {
+	const [error, setError] = useState<string | null>(null);
+	const navigate = useNavigate();
+
+	return (
+		<HandleCallback
+			navigate={navigate}
+			afterSignInUrl={'/'}
+			onError={(message) => {
+				// Handle the error
+			}}>
+		</HandleCallback>
+	);
+};
+
+export default Callback;
+```

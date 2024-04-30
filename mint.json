@@ -27,16 +27,8 @@
   },
   "tabs": [
     {
-      "name": "API Reference",
-      "url": "api-reference"
-    },
-    {
-      "name": "Node SDK",
-      "url": "libraries/nodejs"
-    },
-    {
-      "name": "Python SDK",
-      "url": "libraries/python"
+      "name": "Libraries",
+      "url": "libraries"
     }
   ],
   "anchors": [
@@ -116,8 +108,6 @@
             "product/monetization/quotas"
           ]
         },
-        "product/gateway",
-        "product/analytics",
         "product/webhooks"
       ]
     },
@@ -130,55 +120,18 @@
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Client SDKs",
       "pages": [
-        "api-reference/introduction"
+        "libraries/client-sdk/javascript",
+        "libraries/client-sdk/react",
+        "libraries/client-sdk/nextjs"
       ]
     },
     {
-      "group": "General",
+      "group": "Admin SDKs",
       "pages": [
-        "api-reference/endpoints/ping",
-        "api-reference/endpoints/whoami",
-        "api-reference/endpoints/get-public-key"
-      ]
-    },
-    {
-      "group": "Users",
-      "pages": [
-        "api-reference/endpoints/users/list",
-        "api-reference/endpoints/users/find-by-id",
-        "api-reference/endpoints/users/find-by-email"
-      ]
-    },
-    {
-      "group": "Get started",
-      "pages": [
-        "libraries/nodejs/quick-start"
-      ]
-    },
-    {
-      "group": "Gateway",
-      "pages": [
-        "libraries/nodejs/parse-token"
-      ]
-    },
-    {
-      "group": "Users",
-      "pages": [
-        "libraries/nodejs/users/list"
-      ]
-    },
-    {
-      "group": "Get started",
-      "pages": [
-        "libraries/python/quick-start"
-      ]
-    },
-    {
-      "group": "Gateway",
-      "pages": [
-        "libraries/python/parse-token"
+        "libraries/admin-sdk/node",
+        "libraries/admin-sdk/deno"
       ]
     }
   ],

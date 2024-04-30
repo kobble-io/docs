@@ -1,0 +1,335 @@
+---
+title: 'Javascript'
+description: 'Learn how to integrate Kobble in any Javascript Application.'
+icon: 'js'
+---
+
+## Quick start
+
+<Steps>
+    <Step title="Install @kobbleio/javascript">
+        Our SDK for javascript applications helps you to easily authenticate your users in your Vue.js application and manage their session.
+
+        <CodeGroup>
+        ```bash npm
+        npm install @kobbleio/javascript
+        ```
+
+        ```bash yarn
+        yarn add @kobbleio/javascript
+        ```
+
+        ```bash pnpm
+        pnpm add @kobbleio/javascript
+        ```
+    </CodeGroup>
+    </Step>
+    <Step title="Initialize the SDK">
+        Create a file `src/kobble/index.ts` where you will initialize the SDK and export the Kobble instance.
+
+        ```typescript
+
+        import { createKobbleClient } from '@kobbleio/javascript'
+
+        export const kobble = createKobbleClient({
+            domain: '<DOMAIN_OF_YOUR_KOBBLE_APPLICATION>',
+            clientId: '<CLIENT_ID_OF_YOUR_KOBBLE_APPLICATION>',
+            redirectUri: '<YOUR_CALLBACK_PAGE_URL>',
+        })
+        ```
+
+        <Note>**KOBBLE_DOMAIN** and **KOBBLE_CLIENT_ID** can be found in your [Kobble Application](https://app.kobble.io/p/applications). The **REDIRECT_URI** must match the callback route we're going to configure in the next step of this tutorial.</Note>
+    </Step>
+
+<Step title="Create a callback handler">
+    Once the user is logged in or signed up, Kobble will redirect the user back to your application with the user's session information. You need to create a callback handler to handle this redirect.
+
+    In this example we demonstrate how to do it in Vue.js but you can adapt it to any other javascript page.
+
+    Use the Kobble client to handle the callback and redirect the user to the home page.
+
+    ```typescript
+    async mounted() {
+        try {
+            await kobble.handleRedirectCallback()
+            this.$router.replace({ name: 'home' })
+        } catch (e: any) {
+            console.error('Error handling redirect callback:', e)
+        }
+    }
+    ```
+</Step>
+
+    <Step title="Use the loginWithRedirect method">
+    Then we can use the `loginWithRedirect` method to redirect the user to the Kobble login page whenever we want to authenticate the user.
+
+    For example with a simple button in vue.js:
+
+    ```typescript
+    <script>
+        import { kobble } from '../kobble'
+
+        const login = async () => {
+        await kobble.loginWithRedirect()
+    }
+    </script>
+    <template>
+        <button @click="login">Login</button>
+    </template>
+        ```
+    </Step>
+</Steps>
+
+
+## Authentication
+
+The kobble client exposes various methods to manipulate the user authentication state.
+
+### Login with redirect
+
+This method triggers a redirect to your Kobble customer portal to start the authentication flow.
+
+Once the user is authenticated, Kobble will redirect the user back to your Callback URL configured while initializing the SDK.
+
+```typescript
+// In an async context
+await kobble.loginWithRedirect()
+```
+
+### Logout
+
+Delete the user session and redirect the user to the Kobble logout page.
+
+This method does redirect the user anywhere, you need to handle the redirection yourself if needed.
+
+Returns `Promise<void>`
+
+```typescript
+// In an async context
+await kobble.logout()
+```
+
+### Handle redirect callback
+
+```typescript
+// In an async context
+await kobble.handleRedirectCallback()
+```
+
+Returns `Promise<void>`
+
+### Get user
+
+```typescript
+// In an async context
+const user = await kobble.getUser()
+```
+
+Returns `Promise<User | null>`
+Where User is matching the following type:
+
+```typescript
+export type User = {
+  id: string
+  email: string | null
+  name: string | null
+  pictureUrl: string | null
+  isVerified: boolean
+  stripeId: string | null
+  updatedAt: Date
+  createdAt: Date
+}
+```
+
+### Get access token
+
+```typescript
+// In an async context
+const accessToken = await kobble.getAccessToken()
+```
+
+Returns `Promise<string | null>`
+
+### Get id token
+
+```typescript
+// In an async context
+const idToken = await kobble.getIdToken()
+```
+
+Returns `Promise<string | null>`
+
+### Is authenticated
+
+Allows you to check if the user is authenticated.
+
+```typescript
+// In an async context
+const isAuthenticated = await kobble.isAuthenticated()
+```
+
+Returns `Promise<boolean>`
+
+### Listen to user state changes
+
+The javascript SDK will keep track of the user state.
+
+However, you can also listen to the user state changes to trigger some custom logic in your application.
+
+<Note>The callback may be called multiple times. For example when you refresh the page, the callback will be called with user = null and then with the user object if present.</Note>
+
+
+```typescript
+kobble.onUserStateChanged((data) => {
+    console.log('User state changed:', data.user) // User | null
+})
+```
+
+## Permissions
+
+### List all permissions
+
+Returns the list of permissions applied to the authenticated user.
+
+```typescript
+// In an async context
+const permissions = await kobble.acl.listPermissions();
+```
+
+Returns `Promise<Permission[]>`
+
+Where Permission is matching the following type:
+
+```typescript
+export type Permission = {
+    id: string
+    name: string
+}
+```
+
+### Check if the user has a permission
+
+```typescript
+// In an async context
+const hasPermission = await kobble.acl.hasPermission('generate-image');
+
+// can take an array of permission names
+const hasPermissionVariant = await kobble.acl.hasPermission(['permission-one', 'permission-two']);
+```
+
+Returns `Promise<boolean>`
+
+## Quotas
+
+### List all quotas
+
+Returns the list of quotas applied to the authenticated user.
+
+```typescript
+// In an async context
+const quotas = await kobble.acl.listQuotas();
+```
+
+Returns `Promise<Quota[]>`
+
+Where Quota is matching the following type:
+
+```typescript
+export type Quota = {
+    id: string
+    name: string
+    remaining: number
+    limit: number
+    usage: number
+}
+```
+
+### Has remaining quota
+
+You can check how much credit is left for a specific quota of the authenticated user by using the `hasRemainingQuota` method.
+
+```typescript
+// In an async context
+const hasRemainingQuota = await kobble.acl.hasRemainingQuota('generate-image');
+
+// can take an array of quota names
+const hasRemainingQuotaVariant = await kobble.acl.hasRemainingQuota(['quota-one', 'quota-two']);
+```
+
+Returns `Promise<boolean>`
+
+## Integrations
+
+### Supabase
+
+If you are using Supabase, you can easily integrate Kobble with your Supabase application and then generate a Supabase token for the authenticated user.
+
+<Note>Learn more about our Supabase integration in our [Supabase guide](/learning/quickstart/supabase)</Note>
+
+```typescript
+// In an async context
+const supabaseToken = await kobble.getSupabaseToken()
+```
+
+Returns `Promise<string | null>`
+
+## Utils
+
+### Open profile page
+
+Open your customer portal profile page in a new tab or the same tab depending on the target parameter.
+
+```typescript
+// In an async context
+await kobble.openPortalProfile()
+```
+
+Parameters:
+- target (optional): `'_blank' | '_self'` - default is `'_self'`
+
+Returns `Promise<void>`
+
+### Open portal pricing page
+
+Open your customer portal pricing page in a new tab or the same tab depending on the target parameter.
+
+```typescript
+// In an async context
+await kobble.openPortalPricing()
+
+```
+
+Parameters:
+- target (optional): `'_blank' | '_self'` - default is `'_self'`
+
+Returns `Promise<void>`
+
+### Get portal URL
+
+Get the URL of your customer portal page.
+
+```typescript
+const url = kobble.getPortalUrl()
+```
+
+Returns `string`
+
+### Get portal profile URL
+
+Get the URL of your customer portal profile page.
+
+```typescript
+const url = kobble.getPortalProfileUrl()
+```
+
+Returns `string`
+
+### Get portal pricing URL
+
+Get the URL of your customer portal pricing page.
+
+```typescript
+const url = kobble.getPortalPricingUrl()
+```
+
+Returns `string`
