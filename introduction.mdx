@@ -1,32 +1,26 @@
 ---
 title: Introduction
-description: 'Welcome to the Kobble documentation! Here you will find everything you need to get started with Kobble. If you have any questions, feel free to reach out to us on our Discord server. We are always happy to help!'
+description: 'Welcome to Kobble documentation. Here you can learn how to build your SaaS faster than ever.'
 icon: 'House'
 ---
 
-<img
-  className="block dark:hidden"
-  src="/images/hero-light.svg"
-  alt="Hero Light"
-/>
-<img
-  className="hidden dark:block"
-  src="/images/hero-dark.svg"
-  alt="Hero Dark"
-/>
-
 ## Why Kobble?
 
-Whenever you're building an API or a SaaS platform, you always have to build the same things over and over again:
+We have been building SaaS for years and we always repeated the same steps over and over again:
 
-- user authentication
-- payment processing
-- analytics
+- add user authentication (using Firebase, Supbase, Auth0, etc.)
+- connect Stripe and deal with their webhooks hell.
+- build a customer portal to display pricing tables, invoices, etc.
+- managing permissions of users frontend-side and backend-side depending on their subscription
 - ∞ overthinking everything
 
-Kobble is a platform that provides these features **out of the box**, so you can focus on building your product and launching it in minutes.
+Kobble is a platform that provides these features **out of the box** with SDKs that you can integrate in minutes.
+
+**At Kobble we are on a mission to stop this madness and help you launch your product faster.**
 
 Our mission is to help you achieve product market fit faster.
+
+### How much time can I save?
 
 With Kobble, you save (at least):
 
@@ -35,14 +29,59 @@ With Kobble, you save (at least):
 - +4 hours to authenticate users
 - +4 hours to set up your analytics funnel in Amplitude
 - +2 days to build a robust permission system + quotas
+=> 7+ days of headaches saved (at very least)
 - ∞ hours overthinking...
 
-=> 7+ days of headaches saved (at very least)
-<img
-    className="block"
-    src="/images/kobble-diagram.svg"
-    alt="Kobble Diagram"
-/>
+
+### What does it look like?
+
+It depends on the framework you are using but in a nutshell here's how it looks for a React app and a Node.js backend:
+
+<CodeGroup>
+    ```jsx Frontend side example
+    import {
+        SignedIn,
+        HasPermission,
+        HasRemainingQuota,
+    } from '@kobbleio/react';
+
+        return (
+        <>
+            <SignedIn>
+                <HasPermission permission={'createImage'}>
+                    <!-- Your code here -->
+                </HasPermission>
+                <HasRemainingQuota quota={'imageGenerated'}>
+                    <!-- Your code here -->
+                </HasRemainingQuota>
+            </SignedIn>
+        </>
+        )
+    ```
+    ```jsx Backend side example
+        import { Kobble } from '@kobbleio/admin';
+
+        const kobble = new Kobble('api-key');
+
+        const { userId } = await kobble
+        .auth
+        .verifyAccessToken('user-token')
+
+        const user = kobble.user(userId)
+
+        const hasPerm = await user.hasPermission(
+        'generate-image'
+        )
+
+        const hasQuota = await user.hasRemainingQuota(
+        'image-generated'
+        )
+
+        await user.incrementQuotaUsage(
+        'image-generated'
+        )
+    ```
+</CodeGroup>
 
 ## Core Concepts
 

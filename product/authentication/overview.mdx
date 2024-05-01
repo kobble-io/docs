@@ -15,23 +15,14 @@ Kobble provides a variety of login providers:
 ![title](/images/auth-diagram.jpg)
 
 
-## Core concepts
+## Authentication flow
 
-### Auth Applications
+<Note>The following flow is handled automatically by Kobble when using our SDKs.</Note>
 
-In general, you want to use your Kobble Customer Portal as an authentication method from your application, website or GPT plugin.
-
-To do so, you need to create an Auth Application in your Kobble dashboard.
-
-This will give you a `client_id` and `client_secret` that you can use to authenticate your users.
-
-### Authentication flow
-
-1. A user clicks on the "Login" button on your website, application or GPT.
+1. A user clicks on the "Login" button on your web application.
 2. The user is redirected to your Customer Portal, where they can choose a login provider.
-3. Once signed in, the user is redirected back to your website, application or GPT with an access token.
-4. Then the access token is used to make requests your API through the Kobble Gateway.
-5. Kobble will monitor every request and make sure the user is authorized to access your API.
+3. Once signed in, the user is redirected back to your application.
+4. Then, with both our frontend and backend SDKs, you can identify the user and verify their permissions, quotas, and more.
 
 ## Configuring Login Providers
 

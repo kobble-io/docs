@@ -5,14 +5,25 @@ description: The central platform for your users to sign up, log in, and manage 
 
 ![title](/images/portal-diagram.jpg)
 
-Whether you're targeting developers or GPT users with your API, offering a seamless customer portal is essential. A well-designed customer portal enhances user experience by providing a centralized platform for users to:
+Designing an intuitive and user-friendly customer portal is key when building a SaaS. However, it's also a time-consuming and complex process that requires a lot of resources.
+
+Kobble provides a built-in customer portal that allows your users to:
 
 - Sign up or log in securely
 - Explore pricing options, subscribe to services, and manage their subscriptions
 - Access their profile, view invoices, and more
 
-The great news? Kobble has got you covered.
-Our customer portal comes fully equipped, meaning you won't have to write a single line of code. With Kobble, you can focus on what you do best, while we take care of providing your users with a smooth, intuitive portal experience.
+### How it works?
+
+Our frontend SDKs allow you to redirect your users to the customer portal when needed (during the login process, for example).
+The portal is hosted on a separate domain, which you can customize to match your brand's look and feel.
+
+Then Kobble takes care of the rest, including:
+- User authentication and session management
+- Subscription management
+- Stripe integration (you don't have to deal with Stripe's webhooks hell)
+- Permission and Quota management
+
 
 <Note>
     To guarantee that your customer portal functions flawlessly, it's crucial to set up an authentication method and define your pricing structure. The following sections will guide you through these essential steps.
