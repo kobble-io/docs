@@ -1,6 +1,7 @@
 ---
-title: Overview
-description: Start selling your API in under 10 minutes.
+title: Monetization
+description: Start monetizing your SaaS in 10 minutes.
+icon: money-bills
 ---
 
 ### Products and Prices
@@ -11,30 +12,28 @@ A `Product` is an item that you can sell to your customers at a given `Price`.
 
 A Product wraps information such as a Name, a Description and a list of Features.
 
-A `Price` can be configured to be a `one-time payment` or a `recurring subscription`.
-
 You can configure multiple prices for a single product, allowing you to offer different pricing options to your customers (e.g. a monthly, yearly, etc.).
 
 Your products will be displayed on your Customer Portal so that your customers can purchase them.
 
 You don't have to write any code to start selling your products.
 
-All your customers and payment will still be visible in your Stripe account so you can own your data and manage your customers as you wish later.
 
 <Note>
-    Kobble partners with Stripe to handle all payments. Having a valid Stripe account is prerequisite to use our service.
-    At the moment, we do not, nor plan to, support any other payment gateway than Stripe.
+    All your customers and payment will still be visible in your Stripe account so you can own your data and manage your customers as you wish later.
 </Note>
 
 ### Quotas
 
-A `Quota` is a limit on the usage of a product. You can configure quotas to limit the usage of your products.
+Quotas are a way to meter and limit the usage of your application.
 
-When a quota is reached for a customer, Kobble will automatically return a specific message containing a link to the payment portal so the customer can upgrade their plan.
+When a `Quota` is added to a `Product`, all customers subscribed to this product will be subject to the quotas you have defined.
 
-<Note>
-    By default, if no quotas are set, your customers will be able to use your products with no limit.
-</Note>
+### Permissions
+
+Permissions are a way to control access to your application.
+
+When a `Permission` is added to a `Product`, all customers subscribed to this product will be granted the permissions you have defined.
 
 
 ## Connecting your Stripe account

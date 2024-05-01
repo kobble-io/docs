@@ -91,23 +91,12 @@
                   "product/authentication/social/gitlab",
                   "product/authentication/social/azure-ad"
                 ]
-              },
-              {
-                "group": "Email",
-                "pages": [
-                  "product/authentication/email/magic-link"
-                ]
               }
             ]
         },
-        {
-          "group": "Monetization",
-          "icon": "money-bills",
-          "pages": [
-            "product/monetization/overview",
-            "product/monetization/quotas"
-          ]
-        },
+        "product/monetization",
+        "product/quotas",
+        "product/permissions",
         "product/webhooks"
       ]
     },

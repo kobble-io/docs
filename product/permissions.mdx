@@ -1,0 +1,46 @@
+---
+title: Permissions
+icon: shield
+---
+
+Permissions are a way to control the access of your users to your app's features.
+
+They are almost like quotas, but they are not limited by a number. Instead, they are boolean values that can be set to true or false.
+
+When attached to a product, all users who subscribe to this product will inherit the permissions attached to it.
+
+## Example
+
+For example, if your app allows users to generate videos, you can create a permission called `generate-videos`.
+
+Then, you can set the permission `generate-videos` to true for members on the premium plan and false for members on the free plan.
+
+Then from your frontend code, you could display a button to generate videos only if the user has the permission `generate-videos` set to true.
+
+Example code:
+
+<CodeGroup>
+    ```tsx Frontend example (React)
+    import { IsAllowed, IsForbidden } from '@kobble/react';
+
+    function App() {
+      return (
+          <IsAllowed permission="generate-videos">
+            <button>Generate Video</button>
+          </IsAllowed>
+          <IsForbidden permission="generate-videos">
+            <p>You need to upgrade to the premium plan to generate videos</p>
+         </IsForbidden>
+      );
+    }
+    ```
+
+    ```tsx Backend example (Node.js)
+    import { Kobble } from '@kobble/admin';
+
+    const kobble = new Kobble('API_KEY');
+    const userId = '123';
+    // Check if the user has the permission to generate videos
+    const isAllowed = await kobble.users.hasPermission(userId, 'generate-videos');
+    ```
+</CodeGroup>

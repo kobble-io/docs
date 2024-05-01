@@ -1,0 +1,81 @@
+---
+title: Quotas
+icon: calculator
+---
+
+Quotas are a way to limit the usage of your products.
+
+When attached to a product, all users who subscribe to this product will inherit the quotas attached to it.
+
+## Example
+
+For example, if your app is a photo edition app and you want to limit the number of generated images per month, you can create a quota called `generated-images` and attach it to your product.
+
+Then, you can set the limit of the quota to:
+
+- 10 generated images per month for members on the free plan
+- 100 generated images per month for members on the premium plan
+
+Then from your frontend code, you could display a button to generate images only if the user has remaining credits.
+
+Example code:
+
+<CodeGroup>
+    ```tsx Frontend example (React)
+    import { IsAllowed, IsForbidden, useAccessControl } from '@kobble/react';
+
+    function App() {
+        const { getQuota } = useAccessControl();
+        const quota = getQuota('generated-images');
+
+        return (
+            <span>Usage: {quota.usage} of {quota.limit}</span>
+
+            <IsAllowed quota="generated-images">
+                <button>Generate Image</button>
+            </IsAllowed>
+            <IsForbidden permission="generated-images">
+                <p>You need to upgrade to the premium plan to generate videos</p>
+            </IsForbidden>
+        )
+    }
+    ```
+
+    ```tsx Backend example (Node.js)
+    import { Kobble } from '@kobble/admin';
+
+    const kobble = new Kobble('API_KEY');
+    const userId = '123';
+    // Check if the user has enough credit to generate images
+    const isAllowed = await kobble.users.hasRemainingQuota(userId, 'generated-images');
+    ```
+</CodeGroup>
+
+## Create a quota
+
+To create a quota, visit the [Quotas](https://app.kobble.io/p/monetize/quotas) page.
+
+Create a quota and name it idiomatically.
+
+For example, if you want to limit the number of generated images per month, you can name it `generated-images`.
+
+Then, you can set the limit of the quota for every product you want to apply it to.
+
+Go to the [Products](https://app.kobble.io/p/monetize/products) page and click on the product you want to apply the quota to.
+
+Then, click on the Quotas tab and select the quota you just created.
+
+Now, every user who subscribes to this product will have this quota applied to them.
+
+## Manipulate quotas
+
+There are two ways to manipulate quotas:
+- Programmatically using our [Admin SDK](/libraries/admin-sdk/node) or [Frontend libraries](/libraries/client-sdk) depending on your use case.
+- Manually using the [Admin Console](https://app.kobble.io/p/users/view)
+
+You can:
+- Increase or decrease the limit of a quota for a specific user.
+- Reset the limit of a quota for a specific user.
+- Get the current usage of a quota for a specific user.
+- Verify if a user has reached the limit of a quota.
+
