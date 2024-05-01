@@ -7,13 +7,13 @@ icon: 'React'
 ## You will learn how to:
 
 - Create a new React application using Vite
-- Configure `@kobbleio/auth-spa-js` SDK
+- Configure `@kobbleio/javascript` SDK
 - Protect your application routes
 
 <Note>Pre-requisites: You need to [set up your Kobble account](/learning/quickstart/setup) before starting this guide.</Note>
 
 <Warning>
-    This guide uses @kobbleio/auth-spa-js SDK to manage the authentication state of your React application. This SDK is a lower level SDK that provides you with the tools to authenticate your users in a single-page application (SPA) using Kobble. To get started with a higher level SDK that provides you with a ready-to-use authentication flow, check out our [React Auth SDK](/learning/quickstart/react-auth-sdk) guide.
+    This guide uses @kobbleio/javascript SDK to manage the authentication state of your React application. This SDK is a lower level SDK that provides you with the tools to authenticate your users in a single-page application (SPA) using Kobble. To get started with a higher level SDK that provides you with a ready-to-use authentication flow, check out our [React Auth SDK](/learning/quickstart/react-auth-sdk) guide.
 </Warning>
 
 ## Example repository
@@ -22,7 +22,7 @@ icon: 'React'
 
 This is a simple React starter project that demonstrates how to implement authentication in a React application.
 
-It uses react-router, pinia, tailwind and [@kobbleio/auth-spa-js SDK](https://www.npmjs.com/package/@kobbleio/auth-spa-js) to manage the authentication state of the application.
+It uses react-router, pinia, tailwind and [@kobbleio/javascript SDK](https://www.npmjs.com/package/@kobbleio/javascript) to manage the authentication state of the application.
 
 Check our the repository for more information:
 
@@ -59,20 +59,20 @@ Check our the repository for more information:
             ```
         </CodeGroup>
     </Step>
-    <Step title="Install @kobbleio/auth-spa-js">
+    <Step title="Install @kobbleio/javascript">
         Our auth SDK for SPAs helps you to easily authenticate your users in your React application and manage their session.
 
         <CodeGroup>
             ```bash npm
-            npm install @kobbleio/auth-spa-js
+            npm install @kobbleio/javascript
             ```
 
             ```bash yarn
-            yarn add @kobbleio/auth-spa-js
+            yarn add @kobbleio/javascript
             ```
 
             ```bash pnpm
-            pnpm add @kobbleio/auth-spa-js
+            pnpm add @kobbleio/javascript
             ```
         </CodeGroup>
     </Step>
@@ -82,7 +82,7 @@ Check our the repository for more information:
         ```typescript
         // src/kobble/index.ts
 
-        import { createKobbleClient } from '@kobbleio/auth-spa-js'
+        import { createKobbleClient } from '@kobbleio/javascript'
 
         export const kobbleClient = createKobbleClient({
             domain: import.meta.env.VITE_KOBBLE_DOMAIN,

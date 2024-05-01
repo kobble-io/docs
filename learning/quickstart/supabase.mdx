@@ -122,25 +122,25 @@ Here's a diagram illustrating how Kobble and Supabase work together in this tuto
 
         <CodeGroup>
             ```bash npm
-            npm i @supabase/supabase-js @kobbleio/auth-spa-js
+            npm i @supabase/supabase-js @kobbleio/javascript
             ```
 
             ```bash yarn
-            yarn add @supabase/supabase-js @kobbleio/auth-spa-js
+            yarn add @supabase/supabase-js @kobbleio/javascript
             ```
 
             ```bash pnpm
-            pnpm add @supabase/supabase-js @kobbleio/auth-spa-js
+            pnpm add @supabase/supabase-js @kobbleio/javascript
             ```
         </CodeGroup>
 
-        <Note>Here we're using the **@kobbleio/auth-spa-js** package, which is the Kobble SDK for Single Page Applications. But you can check our [quickstart guides](/learning/quickstart/setup) for more examples.</Note>
+        <Note>Here we're using the **@kobbleio/javascript** package, which is the Kobble SDK for Single Page Applications. But you can check our [quickstart guides](/learning/quickstart/setup) for more examples.</Note>
 
         2. Initialize your Kobble SDK (either React SDK, Vanilla SDK, or Vue SDK) with as shown in our quickstart guides.
 
         ```ts
         // src/kobble/index.ts
-        import { createKobbleClient } from '@kobbleio/auth-spa-js'
+        import { createKobbleClient } from '@kobbleio/javascript'
 
         export const kobbleClient = createKobbleClient({
             domain: import.meta.env.VITE_KOBBLE_DOMAIN,
