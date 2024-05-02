@@ -25,12 +25,6 @@
     "name": "Dashboard",
     "url": "https://app.kobble.io"
   },
-  "tabs": [
-    {
-      "name": "Libraries",
-      "url": "libraries"
-    }
-  ],
   "anchors": [
     {
       "name": "Community",
@@ -51,11 +45,12 @@
         ]
     },
     {
-      "group": "Learning",
+      "group": "Quickstart",
       "pages": [
         "learning/quickstart/setup",
-        "learning/quickstart/vuejs",
+        "learning/quickstart/next",
         "learning/quickstart/react",
+        "learning/quickstart/vuejs",
         {
           "group": "Integrations",
           "icon": "Plug",
@@ -101,18 +96,16 @@
       ]
     },
     {
-      "group": "Guides",
-      "pages": [
-        "guides/best-practices",
-        "guides/crisp"
-      ]
+      "group": "Fullstack SDKs",
+        "pages": [
+          "libraries/client-sdk/nextjs"
+        ]
     },
     {
       "group": "Client SDKs",
       "pages": [
         "libraries/client-sdk/javascript",
-        "libraries/client-sdk/react",
-        "libraries/client-sdk/nextjs"
+        "libraries/client-sdk/react"
       ]
     },
     {
@@ -120,6 +113,13 @@
       "pages": [
         "libraries/admin-sdk/node",
         "libraries/admin-sdk/deno"
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "guides/best-practices",
+        "guides/crisp"
       ]
     }
   ],
