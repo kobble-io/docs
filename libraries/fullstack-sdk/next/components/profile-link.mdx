@@ -1,0 +1,26 @@
+---
+title: <ProfileLink />
+---
+
+The `<ProfileLink />` component displays a link to the profile page of your customer portal.
+
+### Props
+
+<ParamField path="children" type="ReactNode" required={true}>
+    The content of the link.
+</ParamField>
+
+### Example
+
+```tsx
+import { ProfileLink } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <ProfileLink>
+            <span class={'something'}>View my profile</span>
+        </ProfileLink>
+    );
+}
+```
+

@@ -1,0 +1,42 @@
+---
+title: Overview
+---
+
+Kobble makes it super easy to integrate Authentication, Payment and Permissions in your Next.js application.
+
+This documentation covers the capabilities and methods available from Kobble's Next.js SDK.
+
+## Quickstart
+
+You can refer to our [Next.js Quickstart Guide](/learning/quickstart/next) to get started with Kobble in your Next.js application.
+
+## Examples
+
+We continuously craft new examples to help you get started with Kobble in your Next.js application and to inspire you to build your own projects.
+
+You can find all our examples in our [Examples GitHub repository](https://github.com/kobble-io/kobble-next-examples).
+
+## Client-side helpers
+
+The Next.js SDK provides a set of hooks and components to help you integrate Kobble in your Next.js application with ease.
+
+### Hooks
+
+- [`useAuth()`](/libraries/fullstack-sdk/next/hooks/use-auth) - A hook to access the user's authentication state.
+- [`useAccessControl()`](/libraries/fullstack-sdk/next/hooks/use-access-control)  - A hook to access the user's permissions and quotas.
+- [`useKobble()`](/libraries/fullstack-sdk/next/hooks/use-kobble) - A hook to access the lower-level Kobble SDK instance.
+
+### Components
+
+- [`<SignedIn />`](/libraries/fullstack-sdk/next/components/signed-in) - To display content only when the user is signed in.
+- [`<SignedOut />`](/libraries/fullstack-sdk/next/components/signed-out) - To display content only when the user is signed out.
+- [`<LoginButton />`](/libraries/fullstack-sdk/next/components/login-button) - A button to trigger the login flow.
+- [`<LogoutButton />`](/libraries/fullstack-sdk/next/components/logout-button) - A button to trigger the logout flow.
+- [`<IsAllowed />`](/libraries/fullstack-sdk/next/components/is-allowed) - To restrict access based on the user's permissions or quotas.
+- [`<IsForbidden />`](/libraries/fullstack-sdk/next/components/is-forbidden) - To display content based on the user's missing permissions or quotas.
+- [`<PricingLink />`](/libraries/fullstack-sdk/next/components/pricing-link) - A link to the pricing page in your Customer Portal.
+- [`<ProfileLink />`](/libraries/fullstack-sdk/next/components/profile-link) - A link to the user's profile page in your Customer Portal.
+
+
+
+

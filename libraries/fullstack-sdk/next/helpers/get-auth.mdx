@@ -1,0 +1,37 @@
+---
+title: getAuth()
+---
+
+import KobbleServerAuthSession from '/snippets/types/next/KobbleServerAuthSession.mdx'
+import User from '/snippets/types/next/User.mdx'
+
+The `getAuth()` function can be used to retrieve the current authentication state of the user from the server.
+
+### Returns
+
+Returns an object containing the following fields:
+
+<ResponseField name="session" type="KobbleServerAuthSession | null">
+    The current session object, or `null` if the user is not authenticated.
+
+    <KobbleServerAuthSession />
+    <User />
+</ResponseField>
+
+### Examples
+
+```tsx
+```ts
+import { getAuth } from '@kobbleio/next/server'
+
+export default async function handler(req, res) {
+  const { session } = await getAuth();
+
+  if (!session) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  // An active session was found. User and tokens can be accessed from the session object.
+  // <further logic here...>
+}
+```

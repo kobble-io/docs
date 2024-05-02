@@ -1,0 +1,44 @@
+---
+title: <SignedIn />
+---
+
+The `<SignedIn>` component allows you to show content only when the user is signed in.]]
+
+### Props
+
+<ParamField path="children" type="ReactNode">
+    The content to show when the user is signed in.
+</ParamField>
+
+### Examples
+
+```tsx
+import { SignedIn } from "@kobbleio/next/client";
+
+export default function Home() {
+    return (
+        <SignedIn>
+            <span>Your're authenticated</span>
+        </SignedIn>
+    );
+}
+```
+
+It can be used in combination with the `<SignedOut>` component to show different content based on the user's authentication status.
+
+```tsx
+import { SignedIn, SignedOut } from "@kobbleio/next/client";
+
+export default function Home() {
+    return (
+        <>
+            <SignedIn>
+                <span>Your're authenticated</span>
+            </SignedIn>
+            <SignedOut>
+                <span>Your're not authenticated</span>
+            </SignedOut>
+        </>
+    );
+}
+```

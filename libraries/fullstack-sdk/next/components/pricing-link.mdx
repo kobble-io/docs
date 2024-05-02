@@ -1,0 +1,26 @@
+---
+title: <PricingLink />
+---
+
+The `<PricingLink />` component displays a link to the pricing page of your customer portal.
+
+### Props
+
+<ParamField path="children" type="ReactNode" required={true}>
+    The content of the link.
+</ParamField>
+
+### Example
+
+```tsx
+import { PricingLink } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <PricingLink>
+            <span class={'something'}>Go to pricing</span>
+        </PricingLink>
+    );
+}
+```
+

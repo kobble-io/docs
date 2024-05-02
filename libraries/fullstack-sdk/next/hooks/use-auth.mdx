@@ -1,0 +1,54 @@
+---
+title: useAuth()
+---
+
+The `useAuth()` hook provides access to the current user's authentication state.
+
+### Returns
+
+An object with the following properties:
+
+<ResponseField name="isLoading" type="boolean">
+    A boolean indicating whether the authentication state is still being loaded.
+</ResponseField>
+<ResponseField name="user" type="User | null">
+    The User object of the currently authenticated user, or `null` if the user is not authenticated.
+</ResponseField>
+<ResponseField name="isAuthenticated" type="boolean">
+    A boolean indicating whether the user is authenticated.
+</ResponseField>
+<ResponseField name="login" type="function">
+    A function that can be called to initiate the login process.
+</ResponseField>
+<ResponseField name="logout" type="function">
+    A function that can be called to initiate the logout process.
+</ResponseField>
+
+### Examples
+
+```tsx
+import { useAuth } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    const { isLoading, user, isAuthenticated } = useAuth();
+
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (isAuthenticated) {
+        return (
+            <div>
+                <p>Welcome, {user.name}!</p>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <p>You are not logged in.</p>
+        </div>
+    );
+}
+
+```

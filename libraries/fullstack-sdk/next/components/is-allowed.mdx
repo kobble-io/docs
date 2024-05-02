@@ -1,0 +1,57 @@
+---
+title: <IsAllowed />
+---
+
+The `<IsAllowed />` component is used to conditionally render content based on the user's permissions or quotas.
+
+
+### Props
+
+<ParamField path="permission" type="string | string[]">
+    The name(s) of the permission(s) the user must have to render the content.
+</ParamField>
+<ParamField path="quota" type="string | string[]">
+    The name(s) of the available quota(s) the user must have reached to render the content.
+</ParamField>
+<ParamField path="children" type="ReactNode">
+    The content to show when the user is allowed.
+</ParamField>
+
+
+### Examples
+
+```jsx
+import { IsAllowed } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <IsAllowed permission="generate-images">
+            <button>Generate Image</button>
+        </IsAllowed>
+    );
+}
+```
+
+```jsx
+import { IsAllowed } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <IsAllowed permission={["generate-images", 'view-images']}>
+            <button>Generate Image</button>
+        </IsAllowed>
+    );
+}
+```
+
+```jsx
+import { IsAllowed } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <IsAllowed quota="generated-videos">
+            <button>Generate Video</button>
+        </IsAllowed>
+    );
+}
+```

@@ -1,0 +1,44 @@
+---
+title: <LogoutButton />
+---
+
+The `<LogoutButton>` component allows you to show a button that triggers the login flow and redirects the user to your authentication portal.
+
+You can use the component as it or pass it a child to customize it.
+
+### Props
+
+<ParamField path="children" type="ReactNode" required={false}>
+    A single child element to customize the button. Don't pass any handler even if it's a button.
+</ParamField>
+
+### Examples
+
+#### Default usage
+
+```tsx
+import { LogoutButton, SignedOut } from "@kobbleio/next/client";
+
+<SignedOut>
+    <LogoutButton />
+</SignedOut>
+```
+
+#### Custom button
+
+```tsx
+import { LogoutButton, SignedOut } from "@kobbleio/next/client";
+
+export default function CustomLogoutButton() {
+    return (
+        <SignedOut>
+            <LogoutButton>
+                <button className={'custom-class'}>Sign out</button>
+            </LogoutButton>
+        </SignedOut>
+    );
+}
+```
+
+<Note>The onClick event will automatically get handled by the SDK, don't pass any handler.</Note>
+

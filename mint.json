@@ -61,6 +61,59 @@
       ]
     },
     {
+      "group": "Fullstack SDKs",
+      "pages": [
+        {
+          "group": "Next.js",
+          "icon": "N",
+            "pages": [
+                "libraries/fullstack-sdk/next/overview",
+              {
+                "group": "Components",
+                "pages": [
+                  "libraries/fullstack-sdk/next/components/signed-in",
+                  "libraries/fullstack-sdk/next/components/signed-out",
+                  "libraries/fullstack-sdk/next/components/is-allowed",
+                  "libraries/fullstack-sdk/next/components/is-forbidden",
+                    "libraries/fullstack-sdk/next/components/login-button",
+                    "libraries/fullstack-sdk/next/components/logout-button",
+                    "libraries/fullstack-sdk/next/components/pricing-link",
+                    "libraries/fullstack-sdk/next/components/profile-link"
+                ]
+              },
+              {
+                "group": "Hooks (client-side)",
+                "pages": [
+                  "libraries/fullstack-sdk/next/hooks/use-auth",
+                    "libraries/fullstack-sdk/next/hooks/use-access-control",
+                    "libraries/fullstack-sdk/next/hooks/use-kobble"
+                ]
+              },
+              {
+                "group": "Helpers (server-side)",
+                "pages": [
+                  "libraries/fullstack-sdk/next/helpers/get-auth"
+                ]
+              }
+            ]
+        }
+      ]
+    },
+    {
+      "group": "Client SDKs",
+      "pages": [
+        "libraries/client-sdk/javascript",
+        "libraries/client-sdk/react"
+      ]
+    },
+    {
+      "group": "Admin SDKs",
+      "pages": [
+        "libraries/admin-sdk/node",
+        "libraries/admin-sdk/deno"
+      ]
+    },
+    {
       "group": "Product",
       "pages": [
         {
@@ -93,26 +146,6 @@
         "product/quotas",
         "product/permissions",
         "product/webhooks"
-      ]
-    },
-    {
-      "group": "Fullstack SDKs",
-        "pages": [
-          "libraries/client-sdk/nextjs"
-        ]
-    },
-    {
-      "group": "Client SDKs",
-      "pages": [
-        "libraries/client-sdk/javascript",
-        "libraries/client-sdk/react"
-      ]
-    },
-    {
-      "group": "Admin SDKs",
-      "pages": [
-        "libraries/admin-sdk/node",
-        "libraries/admin-sdk/deno"
       ]
     },
     {

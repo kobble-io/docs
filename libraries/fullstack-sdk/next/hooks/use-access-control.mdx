@@ -1,0 +1,120 @@
+---
+title: useAccessControl()
+---
+
+The `useAccessControl()` hook is used to check if the user has a specific permission or has reached a specific quota programmatically from the frontend.
+
+### Returns
+
+An object with the following properties:
+
+<ResponseField name="isLoading" type="boolean">
+    A boolean indicating whether the authentication state is still being loaded.
+</ResponseField>
+<ResponseField name="permissions" type="Permission[]">
+    The list of permissions the user has.
+</ResponseField>
+<ResponseField name="quotas" type="Quota[]">
+    The list of quotas the user has including the limit, the usage and remaining credit.
+</ResponseField>
+<ResponseField name="hasPermission" type="function(permissionName: string | string[]) => boolean">
+    A function to check if the user has a specific permission.
+</ResponseField>
+<ResponseField name="hasRemainingQuota" type="function(quotaName: string | string[]) => boolean">
+    A function to check if the user has remaining quota for a specific quota.
+</ResponseField>
+
+
+### Examples
+
+#### List user's permissions
+
+```jsx
+import { useAccessControl } from '@kobbleio/next/client';
+
+export default function MyComponent() {
+    const { isLoading, permissions } = useAccessControl();
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <div>
+            <h1>Permissions</h1>
+            <ul>
+                {permissions.map(permission => (
+                    <li key={permission.name}>{permission.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+```
+
+#### List user's quotas usage
+
+```jsx
+import { useAccessControl } from '@kobbleio/next/client';
+
+export default function MyComponent() {
+    const { isLoading, quotas } = useAccessControl();
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <div>
+            <h1>Quotas</h1>
+            <ul>
+                {quotas.map(quota => (
+                    <li key={quota.name}>
+                        <strong>{quota.name}</strong>: {quota.usage} / {quota.limit}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+```
+
+#### Check if user has a specific permission
+
+```jsx
+import { useAccessControl } from '@kobbleio/next/client';
+
+export default function MyComponent() {
+    const { hasPermission } = useAccessControl();
+
+    return (
+        <div>
+            {hasPermission('my-permission') ? (
+                <p>User has permission</p>
+            ) : (
+                <p>User does not have permission</p>
+            )}
+        </div>
+    );
+}
+```
+
+#### Check if user has remaining quota
+
+```jsx
+import { useAccessControl } from '@kobbleio/next/client';
+
+export default function MyComponent() {
+    const { hasRemainingQuota } = useAccessControl();
+
+    return (
+        <div>
+            {hasRemainingQuota('my-quota') ? (
+                <p>User has remaining quota</p>
+            ) : (
+                <p>User does not have remaining quota</p>
+            )}
+        </div>
+    );
+}
+```

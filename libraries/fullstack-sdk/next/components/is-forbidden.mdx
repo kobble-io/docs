@@ -1,0 +1,56 @@
+---
+title: <IsForbidden />
+---
+
+The `<IsForbidden />` component is used to render content only if the user does not have a specific permission or has reached a specific quota.
+
+### Props
+
+<ParamField path="permission" type="string | string[]">
+    The name(s) of the permission(s) the user must have to render the content.
+</ParamField>
+<ParamField path="quota" type="string | string[]">
+    The name(s) of the available quota(s) the user must have reached to render the content.
+</ParamField>
+<ParamField path="children" type="ReactNode">
+    The content to show when the user is forbidden.
+</ParamField>
+
+
+### Examples
+
+```jsx
+import { IsForbidden } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <IsForbidden permission="generate-images">
+            <span>You cannot generate images</span>
+        </IsForbidden>
+    );
+}
+```
+
+```jsx
+import { IsForbidden } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <IsForbidden permission={["generate-images", 'view-images']}>
+            <span>You cannot generate or view images</span>
+        </IsForbidden>
+    );
+}
+```
+
+```jsx
+import { IsForbidden } from "@kobbleio/next/client";
+
+export default function MyComponent() {
+    return (
+        <IsForbidden quota="generated-videos">
+            <span>You have reached the maximum number of generated videos</span>
+        </IsForbidden>
+    );
+}
+```
