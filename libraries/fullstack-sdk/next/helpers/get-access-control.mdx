@@ -1,0 +1,64 @@
+---
+title: getAccessControl()
+---
+
+import AccessControlClass from '/snippets/types/next/AccessControlClass.mdx'
+
+The `getAccessControl()` utility function can be used to get an instance of the `AccessControl` class server-side, which provides methods to verify user permissions and quotas.
+
+### Returns
+
+Returns an instance of the [AccessControl class](/libraries/fullstack-sdk/next/references/classes/access-control) class.
+
+### Examples
+
+#### Verifying user permissions
+
+```ts
+import { getAccessControl } from '@kobbleio/next/server'
+
+export default async function handler(req, res) {
+  const acl = await getAccessControl();
+
+  const hasPermission = await acl.hasPermission('permission-name');
+
+  if (!hasPermission) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  // further logic if authorized
+}
+```
+
+#### Verifying user quotas
+
+```ts
+import { getAccessControl } from '@kobbleio/next/server'
+
+export default async function handler(req, res) {
+  const acl = await getAccessControl();
+
+  const hasRemainingQuota = await acl.hasRemainingQuota('quota-name');
+
+  if (!hasRemainingQuota) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  // further logic if authorized
+}
+```
+
+### Listing user's permissions and quotas
+
+```ts
+import { getAccessControl } from '@kobbleio/next/server'
+
+export default async function handler(req, res) {
+  const acl = await getAccessControl();
+
+  const permissions = await acl.listPermissions();
+  const quotas = await acl.listQuotas();
+
+  return res.json({ permissions, quotas });
+}
+```

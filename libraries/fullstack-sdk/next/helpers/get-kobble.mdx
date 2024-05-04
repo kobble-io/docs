@@ -1,0 +1,29 @@
+---
+title: getKobble()
+---
+
+The `getKobble()` utility function can be used to retrieve the current Kobble instance from the server.
+
+
+### Returns
+
+Returns an instance of the `Kobble Client` class.
+
+### Examples
+
+#### Getting a supabase token
+
+<Note>Check our [Supabase](/learning/quickstart/supabase) documentation for more information on how to get a Supabase token.</Note>
+
+
+```ts
+import { getKobble } from '@kobble/next/server';
+
+export default async function handler(req, res) {
+  const kobble = getKobble();
+
+  const supabaseToken = await kobble.getSupabaseToken();
+
+  // Do something with the token such as calling supabase API
+}
+```

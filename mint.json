@@ -92,7 +92,15 @@
               {
                 "group": "Helpers (server-side)",
                 "pages": [
-                  "libraries/fullstack-sdk/next/helpers/get-auth"
+                  "libraries/fullstack-sdk/next/helpers/get-auth",
+                  "libraries/fullstack-sdk/next/helpers/get-access-control",
+                  "libraries/fullstack-sdk/next/helpers/get-kobble"
+                ]
+              },
+              {
+                "group": "References",
+                "pages": [
+                  "libraries/fullstack-sdk/next/references/classes/access-control"
                 ]
               }
             ]
