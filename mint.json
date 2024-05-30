@@ -68,6 +68,7 @@
           "icon": "N",
             "pages": [
                 "libraries/fullstack-sdk/next/overview",
+                "libraries/fullstack-sdk/next/routes-guard",
               {
                 "group": "Components",
                 "pages": [

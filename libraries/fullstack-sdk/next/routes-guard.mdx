@@ -1,0 +1,68 @@
+---
+title: Auth Middleware
+---
+
+Kobble provides a built-in auth middleware that you can use to protect your routes from unauthenticated users.
+
+## Usage
+
+To use the auth middleware, just create a file named `middleware.ts` in the `src` directory of your project and add the following code:
+
+```typescript
+import { authMiddleware } from "@kobbleio/next/server";
+
+export default authMiddleware({
+  publicRoutes: ["/(.*)"],
+});
+
+export const config = {
+  matcher: [
+    // exclude internal Next.js routes
+    "/((?!.+\\.[\\w]+$|_next).*)",
+    // reinclude api routes
+    "/(api|trpc)(.*)",
+  ],
+};
+
+```
+
+All routes defined in the `publicRoutes` array will be accessible without authentication.
+
+## Routes Matcher
+
+Often, you may want to use path parameters or wildcard to match multiple routes. Here is an example of matchers that you can use.
+
+### Wildcard
+
+You can use `(.*)` to match all routes under a specific path.
+
+Examples:
+
+- `"/(.*)"`: Matches all routes under the root path.
+- `"/public/(.*)"`: Matches all routes under the `/public` path.
+- `/something/:user*`: Matches all routes under the `/something/:user` (e.g. `/something/john`, `/something/john/doe`, etc).
+
+### Path parameters
+
+You can use the `:param` notation to match a path parameter with a given name.
+
+Examples:
+
+- `"/categories/:category"`: Matches all routes under the `/categories` path with a path parameter `category`.
+- `"/categories/:category/posts/:post"`: Matches all routes under the `/categories` path with two path parameters `category` and `post`.
+
+<Note>Path named parameters must use "word characters" ([A-Za-z0-9_]) and start with a colon `:`</Note>
+
+### Advanced path parameters
+
+You can use more advanced patterns to match path parameters with specific format.
+
+Examples:
+
+- `/something/:user*`: Matches all routes under the `/something/:user` (e.g. `/something/john`, `/something/john/doe`, etc).
+- `/something/(\\d+)`: Matches all routes under the `/something` path with a path parameter that must be a number.
+- `/something/:number-(\\d+)`: Matches all routes under the `/something` path with a path parameter that must be a number and start with `number-`.
+- `/something/(public|p)`: Matches all routes under the `/something` path with a path parameter that must be either `public` or `p`.
+
+
+
