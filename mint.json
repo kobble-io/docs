@@ -154,7 +154,24 @@
         "product/monetization",
         "product/quotas",
         "product/permissions",
-        "product/webhooks"
+        {
+          "group": "Webhooks",
+          "icon": "bolt",
+          "pages": [
+            "product/webhooks/overview",
+            {
+              "group": "Events",
+              "pages": [
+                "product/webhooks/events/user.created",
+                "product/webhooks/events/subscription.created",
+                "product/webhooks/events/subscription.updated",
+                "product/webhooks/events/subscription.deleted",
+                "product/webhooks/events/quota.reached",
+                "product/webhooks/events/ping"
+              ]
+            }
+          ]
+        }
       ]
     },
     {

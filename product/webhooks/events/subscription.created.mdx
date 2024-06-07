@@ -1,0 +1,63 @@
+---
+title: Subscription Created
+---
+
+The `subscription.created` event is triggered when a new subscription is created.
+
+### Event Object
+<ParamField path="type" type="subscription.created">
+</ParamField>
+<ParamField path="data" type="Event Data Object">
+    The corresponding event data object as described below.
+</ParamField>
+
+### Data Object
+
+<ParamField path="provider.subscriptionId" type="string">
+    The subscription ID from the provider (Stripe).
+</ParamField>
+<ParamField path="provider.productId" type="string">
+    The product ID from the provider (Stripe).
+</ParamField>
+<ParamField path="provider.priceId" type="string">
+    The price ID from the provider (Stripe).
+</ParamField>
+<ParamField path="projectId" type="string">
+    The project ID.
+</ParamField>
+<ParamField path="productId" type="string">
+    The product ID.
+</ParamField>
+<ParamField path="priceId" type="string">
+    The price ID.
+</ParamField>
+<ParamField path="userId" type="string">
+    The user ID.
+</ParamField>
+<ParamField path="email" type="string">
+    The email address of the user.
+</ParamField>
+<ParamField path="startDate" type="string | null">
+    The start date of the subscription.
+</ParamField>
+<ParamField path="endedAt" type="string | null">
+    The end date of the subscription, if it has ended.
+</ParamField>
+<ParamField path="cancelAt" type="string | null">
+    The date when the subscription is scheduled to cancel.
+</ParamField>
+<ParamField path="canceledAt" type="string | null">
+    The date when the subscription was canceled.
+</ParamField>
+<ParamField path="cancelAtPeriodEnd" type="boolean">
+    Indicates if the subscription will be canceled at the end of the period.
+</ParamField>
+<ParamField path="status" type="string">
+    The status of the subscription.
+</ParamField>
+<ParamField path="trialEnd" type="string | null">
+    The end date of the trial period.
+</ParamField>
+<ParamField path="trialStart" type="string | null">
+    The start date of the trial period.
+</ParamField>

@@ -265,3 +265,66 @@ const hasPermission = await kobble.users.hasPermission(userId, permissions);
 console.log(hasPermission); // Output: true or false, depending on permission availability
 ```
 
+## Webhooks
+
+The Admin SDK provides an utility function that verifies the signature of incoming webhook events and returns a typed event object.
+
+### Construct Event
+
+You can use the `webhooks.constructEvent()` method to handle incoming webhook events from Kobble.
+
+<Note>The list of events you can handle is available in the [webhook events](/product/webhooks/overview) section.</Note>
+
+Here's an example with express:
+
+```ts
+import express from 'express';
+import { Kobble } from '@kobbleio/admin'
+
+const kobble = new Kobble('YOUR_SECRET_KEY');
+
+// Replace this endpoint secret with your endpoint's unique secret
+// If you are using an endpoint defined with the API or dashboard, look in your webhook settings
+// at https://app.kobble.io/p/webhooks
+const endpointSecret = '...';
+
+const app = express();
+
+app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+    let event = request.body;
+
+    const signature = request.headers['Kobble-Signature'];
+    try {
+        event = kobble.webhooks.constructEvent(
+            request.body,
+            signature,
+            endpointSecret
+        );
+    } catch (err) {
+        console.log(`⚠️ Webhook signature verification failed.`, err.message);
+        return response.sendStatus(400);
+    }
+
+    // Handle the event
+    switch (event.type) {
+        case 'user.created':
+          const user = event.data;
+          console.log(`User created with email: ${user.email}.`);
+          // Do something...
+          break;
+        case 'quota.reached':
+          const data = event.data;
+          console.log(`User ${data.userId} reached quota ${data.quotaName}.`);
+          // Do something...
+          break;
+        default:
+          // Unexpected event type
+          console.log(`Unhandled event type ${event.type}.`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  response.send();
+});
+
+app.listen(3000, () => console.log('Running on port 3000'));
+```

@@ -1,7 +1,5 @@
 ---
-title: Webhooks
-description: React to important events in your project with webhooks.
-icon: 'bolt'
+title: Overview
 ---
 
 ## Overview
@@ -12,6 +10,7 @@ For example, you can use webhooks to:
 - Update your CRM when a user signs up for your project.
 - Notify your team in Slack when a new user subscribes to a paid plan.
 - Keep your database in sync when a user is created or updated.
+- Get noticed when a user reached their quota limit.
 
 ![Webhooks examples](/images/webhooks-diagram.jpg)
 
@@ -58,17 +57,17 @@ Here is an example of how to validate the signature in Node.js and Python:
     import { createHmac } from 'crypto';
 
     const isValidSignature = (
-        receivedBody: string,
-        receivedSignature: string,
-        secret: string): boolean =>
+    receivedBody: string,
+    receivedSignature: string,
+    secret: string): boolean =>
     {
         const secretBuffer = Buffer.from(secret, 'hex');
         const generatedSignature = createHmac('sha256', secretBuffer)
-            .update(receivedBody)
-            .digest('hex');
+        .update(receivedBody)
+        .digest('hex');
 
         return receivedSignature === generatedSignature;
-}
+    }
     ```
 
     ```python Python
@@ -76,15 +75,14 @@ Here is an example of how to validate the signature in Node.js and Python:
     import hashlib
 
     def is_valid_signature(received_body: str, received_signature: str, secret: str) -> bool:
-        secret_bytes = bytes.fromhex(secret)
-        generated_signature = hmac.new(secret_bytes, received_body.encode(), hashlib.sha256).hexdigest()
+    secret_bytes = bytes.fromhex(secret)
+    generated_signature = hmac.new(secret_bytes, received_body.encode(), hashlib.sha256).hexdigest()
 
-        return received_signature == generated_signature
+    return received_signature == generated_signature
     ```
 </CodeGroup>
 
-<Note>The [SDKs](/libraries/nodejs/quick-start) will soon provide a method to validate the signature for you.</Note>
-
+<Note>The [Node.js SDK](/libraries/admin-sdk/node#construct-event) provides a method to validate the signature for you.</Note>
 
 ### Request Headers
 
