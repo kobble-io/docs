@@ -118,12 +118,31 @@ console.log(data);
 
 ### Get user by ID
 
-This method will fetch the user by its ID. It returns the user if it exists, null otherwise.
+The `getById` function is an asynchronous method used to retrieve a user by their unique identifier. This function accepts two parameters: `id` and an optional `options` object.
+
+<Note>It throws an error if the user does not exist.</Note>
+
+##### Parameters
+
+- `id` (`string`): The unique identifier of the user to be retrieved.
+- `options` (`object`, optional): An optional object that can contain the following properties:
+    - `includeMetadata` (`boolean`, optional): A flag indicating whether to include metadata in the retrieved user information. Default is `false`.
+
+##### Returns
+
+- `Promise<User>`: A promise that resolves to a `User` object containing the user's information.
+
+##### Example Usage
 
 ```ts
-const user = await kobble.users.getById('USER_ID');
+try {
+ const user = await kobble.users.getById('USER_ID', { includeMetadata: true });
 
-console.log(user);
+ console.log(user);
+} catch (error) {
+    console.error('User not found');
+}
+
 // Example output:
 // {
 //   id: 'clu9ob5480001mdhwk9qt00hv';
@@ -131,7 +150,144 @@ console.log(user);
 //   name: 'Kevin Piacentini';
 //   createdAt: Date;
 //   isVerified: true;
+//   metadata: {};
 // };
+```
+
+### Find Users by Metadata
+
+The `findByMetadata` function is an asynchronous method used to retrieve users based on specific metadata criteria. This function accepts two parameters: `metadata` and an optional `options` object.
+
+##### Parameters
+
+- `metadata` (`Record<string, string>`): An object containing the metadata key-value pairs to filter users. The keys and values are both strings.
+- `options` (`object`, optional): An optional object that can contain the following properties:
+  - `page` (`number`, optional): The page number for pagination. Default is `1`.
+  - `limit` (`number`, optional): The number of users to retrieve per page. Default is `50`.
+
+##### Returns
+
+- `Promise<Paginated<User>>`: A promise that resolves to a paginated object containing the users that match the metadata criteria.
+
+##### Example Usage
+
+This is how you can find all your users having a location set to 'New York' and a preference set to 'dark':
+
+```ts
+try {
+  const metadata = {
+    location: 'New York',
+    preference: 'dark'
+  };
+  const options = { page: 2, limit: 10 };
+
+  const result = await kobble.users.findByMetadata(metadata, options);
+
+  console.log(result);
+} catch (error) {
+  console.error('Failed to find users by metadata', error);
+}
+
+// Example output:
+// {
+//   total: 100,
+//   page: 2,
+//   limit: 10,
+//   data: [
+//     {
+//       id: 'clu9ob5480001mdhwk9qt00hv',
+//       email: 'hello@kobble.io',
+//       name: 'Kevin Piacentini',
+//       createdAt: Date,
+//       isVerified: true,
+//       metadata: {
+//         location: 'New York',
+//         preference: 'dark'
+//       }
+//     },
+//     // ...more users
+//   ]
+// }
+```
+
+##### Limitations
+
+<Warning>Even if the metadata payload can up to 1MB, we recommend keeping your field values as small as possible, especially if you want to search for them. Storing large values in metadata fields can slow down the search process and reveal performance issues on your tenant.</Warning>
+
+### Update user metadata
+
+You can use the `updateMetadata` method to store data into a user.
+
+Unlike `patchMetadata`, which atomically updates the metadata, this method replaces the entire payload stored in the user's metadata field with the new data provided.
+
+<Note>The whole metadata payload must not exceed 1MB, which must be enough for most use cases.</Note>
+
+##### Parameters
+
+- `userId` (`string`): The unique identifier of the user whose metadata needs to be updated.
+- `metadata` (`Record<string, any>`): An object containing the metadata key-value pairs to be updated for the user. The keys are strings, and the values can be of any type.
+
+##### Returns
+
+- `void`: This function does not return a value. It performs the update operation on the specified user's metadata.
+
+##### Example Usage
+
+```ts
+try {
+  const userId = 'USER_ID';
+  const metadata = {
+    age: 30,
+    location: 'New York',
+    preferences: {
+      theme: 'dark',
+      notifications: true
+    }
+  };
+
+  kobble.users.updateMetadata(userId, metadata);
+  console.log('User metadata updated successfully');
+} catch (error) {
+  console.error('Failed to update user metadata', error);
+}
+```
+
+### Patch user metadata
+
+You can use the `patchMetadata` method to atomically update the metadata payload of the user.
+
+Unlike `updateMetadata`, which replaces the whole metadata payload, this method replaces only the provided fields.
+
+<Note>The whole metadata payload must not exceed 1MB, which must be enough for most use cases.</Note>
+
+##### Parameters
+
+- `userId` (`string`): The unique identifier of the user whose metadata needs to be updated.
+- `metadata` (`Record<string, any>`): An object containing the metadata key-value pairs to be updated for the user. The keys are strings, and the values can be of any type.
+
+##### Returns
+
+- `void`: This function does not return a value. It performs the update operation on the specified user's metadata.
+
+##### Example Usage
+
+```ts
+try {
+  const userId = 'USER_ID';
+  const metadata = {
+    age: 30,
+    location: 'New York',
+    preferences: {
+      theme: 'dark',
+      notifications: true
+    }
+  };
+
+  kobble.users.updateMetadata(userId, metadata);
+  console.log('User metadata updated successfully');
+} catch (error) {
+  console.error('Failed to update user metadata', error);
+}
 ```
 
 ### Get user product
