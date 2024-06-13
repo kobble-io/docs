@@ -1,0 +1,390 @@
+---
+title: React Web Extension
+description: Learn how to add authentication to your React-based Chrome extension using the Kobble SDK.
+icon: 'Chrome'
+---
+
+<Note>Pre-requisites: You need to [set up your Kobble account](/learning/quickstart/setup).</Note>
+
+## Suggested boilerplate
+
+Although there are many Chrome Extension boilerplate available on GitHub, we figured many of them just don't work.
+
+So we suggest you use [Jonghakseo/chrome-extension-boilerplate-react-vite](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite)
+
+## Install the SDK
+
+<Steps>
+    <Step title="Install @kobbleio/react-web-extension">
+        Install the @kobbleio/react-web-extension sdk with the provider of your choice.
+
+        <CodeGroup>
+            ```bash npm
+            npm install @kobbleio/react-web-extension
+            ```
+
+            ```bash yarn
+            yarn add @kobbleio/react-web-extension
+            ```
+
+            ```bash pnpm
+            pnpm add @kobbleio/react-web-extension
+            ```
+        </CodeGroup>
+    </Step>
+    <Step title="Use the KobbleProvider">
+        To use the SDK, you must wrap your Popover or Tab component with the `KobbleProvider` component.
+
+        Here's an example taken from our Chrome Extension boilerplate.
+
+        ```tsx
+        import { createRoot } from 'react-dom/client';
+        import '@src/index.css';
+        import Newtab from '@src/Newtab';
+        import { KobbleProvider } from "@kobbleio/react-web-extension";
+
+        function init() {
+            const appContainer = document.querySelector('#app-container');
+            if (!appContainer) {
+                throw new Error('Can not find #app-container');
+            }
+            const root = createRoot(appContainer);
+
+            root.render(
+                <KobbleProvider domain={'YOUR_KOBBLE_DOMAIN'} clientId={'YOUR_CLIENT_ID'}>
+                    <Newtab />
+                </KobbleProvider>
+            );
+        }
+
+        init();
+        ```
+    </Step>
+    <Step title="Replace the KOBBLE DOMAIN and CLIENT ID">
+        In the above snippet, don't forget to replace `YOUR_KOBBLE_DOMAIN` and `YOUR_CLIENT_ID` with your actual Kobble domain and client ID.
+
+        <Note>**KOBBLE_DOMAIN** and **KOBBLE_CLIENT_ID** can be found in your Kobble dashboard.</Note>
+    </Step>
+    <Step title="Add the right permissions to your manifest file">
+       You need to make sure the `permissions` array of your `manifest.json` file contains at least the following permissions:
+
+        ```json
+        // manifest.json
+        {
+            "permissions": [
+                "storage"
+                "identity"
+                "*://*.kobble.io/*"
+                "tabs"
+            ]
+            // rest of the file...
+        }
+        ```
+    </Step>
+    <Step title="Start using our components">
+
+        Unlike for a web application, you don't have to setup a callback handler.
+
+        So we can directly use our components, here's an example.
+
+        ```tsx
+        import {LoginButton, LogoutButton, SignedIn, SignedOut} from "@kobbleio/react-web-extension";
+
+        const Newtab = () => {
+                return (
+                <div>
+                    <SignedIn>
+                        <span>You are logged in</span>
+                        <LogoutButton>Logout</LogoutButton>
+                    </SignedIn>
+
+                    <SignedOut>
+                        <span>You are logged out</span>
+                        <LoginButton>Login</LoginButton>
+                    </SignedOut>
+                </div>
+            );
+        };
+
+        export default Newtab;
+        ```
+    </Step>
+</Steps>
+
+## Hooks
+
+The SDK exposes many hooks that you can use to interact with the authentication state of your application.
+
+### useAuth()
+
+The `useAuth` hook allows you to get the authentication state of the user. Instead of using the `kobble` client instance, you can directly get the user object from the react context.
+
+```tsx
+import { useAuth } from "@kobbleio/react-web-extension";
+
+const { user, isAuthenticated } = useAuth();
+```
+
+### useAuthStateChanged()
+
+The `useAuthStateChanged` hook allows you to listen for changes in the authentication state of the user.
+
+The callback function will be called with the user object when the user is signed in, and `null` when the user is signed out.
+
+<Note>The callback may be called multiple times. For instance when you refresh the page it will be initially called with a `null` user and then the `User` object if authenticated.</Note>
+
+```tsx
+import { useAuthStateChanged } from "@kobbleio/react-web-extension";
+
+useAuthStateChanged((user) => {
+    // user can be null or a User object
+    console.log('Auth state changed', user);
+});
+```
+
+### useAccessControl()
+
+The `useAccessControl` hook allows you to check if the user has the required permissions or quotas to access a specific resource.
+
+<Note>You must attribute quotas and/or permissions to your Products from your [Kobble dashboard](https://app.kobble.io) for them to work.</Note>
+
+#### Check permissions
+
+```tsx
+import { useAccessControl } from "@kobbleio/react-web-extension";
+const { hasPermission } = useAccessControl();
+
+const canGenerateImage = async () => {
+    return hasPermission('generate-image');
+}
+```
+
+#### Check remaining quotas
+
+```tsx
+import { useAccessControl } from "@kobbleio/react-web-extension";
+const { hasRemainingQuota } = useAccessControl();
+
+const canGenerateImage = async () => {
+    return hasRemainingQuota('image-generated');
+}
+```
+
+### useKobble()
+
+The `useKobble` hook allows you to get the `kobble` client instance that exposes various utility methods.
+
+#### Get user state
+
+<Note>Even if you can do it using the Kobble instance we suggest you do it using the `useAuth` hook explained above.</Note>
+
+```tsx
+import { useKobble } from "@kobbleio/react-web-extension";
+
+const { kobble } = useKobble();
+
+const anything = async () => {
+    const user = await kobble.getUser();
+    const isAuthenticated = await kobble.isAuthenticated();
+};
+```
+
+#### Get access and ID tokens
+
+```tsx
+import { useKobble } from "@kobbleio/react-web-extension";
+
+const { kobble } = useKobble();
+
+const anything = async () => {
+    const accessToken = await kobble.getAccessToken();
+    const idToken = await kobble.getIdToken();
+};
+```
+
+#### Listen for state changes
+
+The `onAuthStateChanged` method allows you to listen for changes in the authentication state of the user.
+
+The callback function will be called with the user object when the user is signed in, and `null` when the user is signed out.
+
+<Note>The callback may be called multiple times. For instance when you refresh the page it will be initially called with a `null` user and then the `User` object if authenticated.</Note>
+
+```tsx
+import { useKobble } from "@kobbleio/react-web-extension";
+const { kobble } = useKobble();
+
+kobble.onAuthStateChanged((user) => {
+    // user can be null or a User object
+    console.log('Auth state changed', user);
+});
+```
+
+
+## Components
+
+The SDK exposes a few components that you can use to interact with the authentication state of your application seemlessly.
+
+
+### `<SignedIn>`
+
+The `<SignedIn>` component allows you to show content only when the user is signed in.
+
+```tsx
+import { SignedIn, useAuth } from "@kobbleio/react-web-extension";
+
+const { user } = useAuth();
+
+<SignedIn>
+    <span>Welcome back, {user.name}</span>
+</SignedIn>
+```
+
+### `<SignedOut>`
+
+The `<SignedOut>` component allows you to show content only when the user is signed out.
+
+```tsx
+import { SignedOut } from "@kobbleio/react-web-extension";
+
+<SignedOut>
+    <span>Sign in to access more features</span>
+</SignedOut>
+```
+
+### `<LoginButton>`
+
+The `<LoginButton>` component allows you to show a button that triggers the login flow and redirects the user to your authentication portal.
+
+You can use the component as it or pass it a child to customize it.
+
+**Default usage:**
+
+```tsx
+import { LoginButton, SignedOut } from "@kobbleio/react-web-extension";
+
+<SignedOut>
+    <LoginButton />
+</SignedOut>
+```
+
+**Custom usage:**
+
+```tsx
+import { LoginButton, SignedOut } from "@kobbleio/react-web-extension";
+
+<SignedOut>
+    <LoginButton>
+        <button className="your-class-or-any-other-attribue">Login</button>
+    </LoginButton>
+</SignedOut>
+```
+
+<Note>The onClick event will automatically get handled by the SDK, don't pass any handler.</Note>
+
+### `<LogoutButton>`
+
+The `<LogoutButton>` component allows you to show a button that triggers the logout flow.
+
+You can use the component as it or pass it a child to customize it.
+
+**Default usage:**
+
+```tsx
+import { LogoutButton, SignedIn } from "@kobbleio/react-web-extension";
+
+<SignedIn>
+    <LogoutButton />
+</SignedIn>
+```
+
+**Custom usage:**
+
+```tsx
+import { LogoutButton, SignedIn } from "@kobbleio/react-web-extension";
+
+<SignedIn>
+    <LogoutButton>
+        <button className="your-class-or-any-other-attribue">Logout</button>
+    </LogoutButton>
+</SignedIn>
+```
+
+<Note>The onClick event will automatically get handled by the SDK, don't pass any handler.</Note>
+
+
+### `<IsAllowed>`
+
+The `<IsAllowed>` component allows you to show content only when the user has the required permissions or quotas to access a specific resource.
+
+It takes a `permission` or `quota` prop that you can use to check if the user has the required permissions or quotas.
+
+Both `permission` and `quota` props can be either a string or an array of strings.
+
+```tsx
+import { IsAllowed } from "@kobbleio/react-web-extension";
+
+<IsAllowed permission="generate-image">
+    <button>Generate Image</button>
+</IsAllowed>
+```
+
+```tsx
+import { IsAllowed } from "@kobbleio/react-web-extension";
+
+<IsAllowed quota="image-generated">
+    <button>Generate Image</button>
+</IsAllowed>
+```
+
+### `<IsForbidden>`
+
+The `<IsForbidden>` component allows you to show content only when the user doesn't have the required permissions or quotas to access a specific resource.
+
+It takes a `permission` or `quota` prop that you can use to check if the user doesn't have the required permissions or quotas.
+
+Both `permission` and `quota` props can be either a string or an array of strings.
+
+```tsx
+import { IsForbidden } from "@kobbleio/react-web-extension";
+
+<IsForbidden permission="generate-image">
+    <span>Sorry, you don't have the required permissions to generate an image</span>
+</IsForbidden>
+```
+
+```tsx
+import { IsForbidden } from "@kobbleio/react-web-extension";
+
+<IsForbidden quota="image-generated">
+    <span>Sorry, you've reached the maximum number of images you can generate</span>
+</IsForbidden>
+```
+
+### `<ProfileLink>`
+
+The `<ProfileLink>` component allows you to show a link to the user's profile of your Customer Portal.
+
+It must take a child that will be used as the link text.
+
+```tsx
+import { ProfileLink, SignedIn } from "@kobbleio/react-web-extension";
+
+this
+
+<SignedIn>
+    <ProfileLink>My Profile</ProfileLink>
+</SignedIn>
+```
+
+### `<PricingLink>`
+
+The `<PricingLink>` component allows you to show a link to the pricing page of your Customer Portal.
+
+It must take a child that will be used as the link text.
+
+```tsx
+import { PricingLink } from "@kobbleio/react-web-extension";
+
+<PricingLink>View Pricing</PricingLink>
+```

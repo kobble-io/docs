@@ -112,7 +112,8 @@
       "group": "Client SDKs",
       "pages": [
         "libraries/client-sdk/javascript",
-        "libraries/client-sdk/react"
+        "libraries/client-sdk/react",
+        "libraries/client-sdk/react-web-extension"
       ]
     },
     {
