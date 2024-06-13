@@ -80,7 +80,6 @@ icon: 'js'
     </Step>
 </Steps>
 
-
 ## Authentication
 
 The kobble client exposes various methods to manipulate the user authentication state.
@@ -333,3 +332,56 @@ const url = kobble.getPortalPricingUrl()
 ```
 
 Returns `string`
+
+## Using it in a Chrome Extension
+
+It's possible to use this SDK in a chrome extension, however you will have some prerequisites to make it work.
+
+### Setup
+
+Instead of importing the `KobbleClient` from `@kobbleio/javascript`, you will need to import the `KobbleWebExtensionClient` from `@kobbleio/javascript/web-extension`.
+
+```typescript
+import { createKobbleWebExtensionClient } from '@kobbleio/javascript/web-extension'
+
+export const kobble = createKobbleWebExtensionClient({
+    domain: 'KOBBLE_DOMAIN',
+    clientId: 'KOBBLE_CLIENT_ID',
+})
+```
+
+<Note>Due to how chrome extensions work, you won't need to pass the redirectUri parameter.</Note>
+
+### Update your manifest
+
+You must add the following permissions in your Manifest.json file.
+
+```json
+// manifest.json
+{
+    "permissions": [
+    "storage"
+    "identity"
+    "*://*.kobble.io/*"
+    "tabs"
+    ]
+    // rest of the file...
+}
+```
+
+### Usage differences
+
+Both SDKs are quite similar, however, the `KobbleWebExtensionClient` does not need to handle the redirect callback.
+
+Which means that the `loginWithRedirect` method will directly return the user tokens and you won't have to create a callback page nor using the `handleRedirectCallback` method.
+
+```typescript
+// In an async function
+const result = await kobble.loginWithRedirect()
+const user = await kobble.getUser()
+```
+
+Other methods work the same way as the regular Kobble Client. There are differences in the way they implement the interface (such as for storage) but these differences must not affect your development.
+
+
+
