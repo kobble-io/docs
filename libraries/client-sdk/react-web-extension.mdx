@@ -81,6 +81,15 @@ So we suggest you use [Jonghakseo/chrome-extension-boilerplate-react-vite](https
         }
         ```
     </Step>
+    <Step title="Add the redirect URI of your Chrome Extension into your Kobble Application">
+        1. Open the [Applications tab](https://app.kobble.io/p/applications) of your Kobble dashboard.
+        2. Click on the application you're using in your Chrome extension.
+        3. Scroll to the `Authorized redirect URIs` section and click on `Edit`.
+        4. Add the following URI: `https://ID.chromiumapp.org/callback` where `ID` is the ID of your Chrome extension.
+
+
+        <Note>The **ID** of your extension can be found on this page `chrome://extensions/`. Here is [more information about how to find your ID](https://developer.chrome.com/docs/extensions/how-to/distribute/install-extensions?#prereq-crx). Note that the ID may change if you remove and reload your extension.</Note>
+    </Step>
     <Step title="Start using our components">
 
         Unlike for a web application, you don't have to setup a callback handler.

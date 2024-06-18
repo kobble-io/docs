@@ -369,6 +369,19 @@ You must add the following permissions in your Manifest.json file.
 }
 ```
 
+### Add the redirect URI
+
+You must add the redirect URI of your Chrome Extension to your application in your Kobble dashboard.
+
+1. Open the [Applications tab](https://app.kobble.io/p/applications) of your Kobble dashboard.
+2. Click on the application you're using in your Chrome extension.
+3. Scroll to the `Authorized redirect URIs` section and click on `Edit`.
+4. Add the following URI: `https://ID.chromiumapp.org/callback` where `ID` is the ID of your Chrome extension.
+
+
+<Note>The **ID** of your extension can be found on this page `chrome://extensions/`. Here is [more information about how to find your ID](https://developer.chrome.com/docs/extensions/how-to/distribute/install-extensions?#prereq-crx). Note that the ID may change if you remove and reload your extension.</Note>
+
+
 ### Usage differences
 
 Both SDKs are quite similar, however, the `KobbleWebExtensionClient` does not need to handle the redirect callback.
