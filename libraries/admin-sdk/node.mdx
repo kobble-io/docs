@@ -94,6 +94,98 @@ console.log(result)
 
 ## Users
 
+### Create a new user
+
+You can use the `create` method to create a new user with the specified details.
+
+<Note>The payload can contain various optional fields, allowing for flexible user creation based on available information.</Note>
+
+##### Parameters
+
+<ParamField path="payload.email" type="string">
+    The email address of the user.
+</ParamField>
+<ParamField path="payload.name" type="string">
+    The name of the user.
+</ParamField>
+<ParamField path="payload.phoneNumber" type="string">
+    The phone number of the user.
+</ParamField>
+<ParamField path="payload.metadata" type="Record<string, any>">
+    Additional metadata about the user, as key-value pairs.
+</ParamField>
+<ParamField path="payload.markEmailAsVerified" type="boolean">
+    A flag indicating whether the email should be marked as verified.
+</ParamField>
+<ParamField path="payload.markPhoneNumberAsVerified" type="boolean">
+    A flag indicating whether the phone number should be marked as verified.
+</ParamField>
+
+##### Returns
+
+<ParamField path="Promise<User>">
+    This function returns a promise that resolves to the newly created user object.
+</ParamField>
+
+
+##### Example Usage
+
+```ts
+try {
+  const payload = {
+    email: 'johndoe@example.com',
+    name: 'John Doe',
+    phoneNumber: '+1234567890',
+    metadata: {
+      age: 30,
+      location: 'New York'
+    },
+    markEmailAsVerified: true,
+    markPhoneNumberAsVerified: false
+  };
+
+  const newUser = await kobble.users.create(payload);
+  console.log('New user created successfully', newUser);
+} catch (error) {
+  console.error('Failed to create new user', error);
+}
+```
+
+### Create a login link
+
+You can use the `createLoginLink` method to generate a magic link so the user can log in to your Kobble Customer Portal.
+
+This method can be useful when you're building a WhatsApp bot, for example, and you want to send a login link to the user.
+
+<Note>This method creates a login link that can be used to log in the user. The link will expire after a certain period.</Note>
+
+##### Parameters
+
+<ParamField path="userId" type="string" required={true}>
+    The unique identifier of the user for whom the login link is being created.
+</ParamField>
+
+##### Returns
+
+<ParamField path="Promise<{ url: string; expiresAt: Date }>" type="object" required={true}>
+    This function returns a promise that resolves to an object containing the following properties:
+    - `url` (`string`): The generated login URL.
+    - `expiresAt` (`Date`): The expiration date and time of the login link.
+</ParamField>
+
+##### Example Usage
+
+```ts
+try {
+  const userId = 'USER_ID';
+
+  const { url, expiresAt } = await kobble.users.createLoginLink(userId);
+  console.log('Login link created successfully', { url, expiresAt });
+} catch (error) {
+  console.error('Failed to create login link', error);
+}
+```
+
 ### List users
 
 This method allows you to list all users in your project.
@@ -152,6 +244,42 @@ try {
 //   isVerified: true;
 //   metadata: {};
 // };
+```
+
+### Get user by email
+
+You can use the `getByEmail` method to retrieve a user's details using their email address.
+
+<Note>This method fetches the user details based on the provided email address. Additional options can be specified to include metadata in the response.</Note>
+
+##### Parameters
+
+<ParamField path="email" type="string" required={true}>
+    The email address of the user to be retrieved.
+</ParamField>
+<ParamField path="options" type="GetUserOptions" required={false}>
+    An optional object to specify additional options for retrieving the user. The properties include:
+    - `includeMetadata` (`boolean`, optional): A flag indicating whether to include the user's metadata in the response.
+</ParamField>
+
+##### Returns
+
+<ParamField path="Promise<User>" type="User" required={true}>
+    This function returns a promise that resolves to the user object corresponding to the provided email address.
+</ParamField>
+
+##### Example Usage
+
+```ts
+try {
+  const email = 'johndoe@example.com';
+  const options = { includeMetadata: true };
+
+  const user = await kobble.users.getByEmail(email, options);
+  console.log('User retrieved successfully', user);
+} catch (error) {
+  console.error('Failed to retrieve user', error);
+}
 ```
 
 ### Find users by Metadata
