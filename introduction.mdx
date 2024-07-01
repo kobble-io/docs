@@ -35,7 +35,7 @@ With Kobble, you save (at least):
 
 ### What does it look like?
 
-It depends on the framework you are using but in a nutshell here's how it looks for a React app and a Node.js backend:
+It depends on the framework you are using but in a nutshell here's how it looks for a React app and a Node.js/Go backend:
 
 <CodeGroup>
     ```jsx Frontend side example
@@ -58,7 +58,7 @@ It depends on the framework you are using but in a nutshell here's how it looks 
         </>
         )
     ```
-    ```jsx Backend side example
+    ```jsx JS Backend side example
         import { Kobble } from '@kobbleio/admin';
 
         const kobble = new Kobble('api-key');
@@ -80,6 +80,50 @@ It depends on the framework you are using but in a nutshell here's how it looks 
         await user.incrementQuotaUsage(
         'image-generated'
         )
+    ```
+
+    ```go Go Backend side example
+    package kobble
+
+    import (
+      "fmt"
+
+      "github.com/kobble-io/go-admin/kobble"
+      "github.com/kobble-io/go-admin/users"
+    )
+
+    var secret = os.Getenv("KOBBLE_SECRET")
+
+    func doKobbleThings(token string) error {
+      k := kobble.New(secret, kobble.Options{})
+      tk, err := k.Auth.VerifyAccessToken(token)
+      if err != nil {
+        return fmt.Errorf("failed to verify access token: %w", err)
+      }
+
+      hasPerm, err := k.Users.HasPermission(tk.UserID, []string{"event-handled"}, nil)
+      if err != nil {
+        return fmt.Errorf("failed to check user quota: %w", err)
+      }
+      if !hasPerm {
+        return fmt.Errorf("user does not have permission to increment quota")
+      }
+
+      hasRamaining, err := k.Users.HasRemainingQuota(tk.UserID, []string{"event-handled"}, nil)
+      if err != nil {
+        return fmt.Errorf("failed to check user quota: %w", err)
+      }
+      if !hasRamaining {
+        return fmt.Errorf("user quota exceeded")
+      }
+
+      err = k.Users.IncrementQuotaUsage(tk.UserID, "event-handled", &users.IncrementQuotaOptions{})
+      if err != nil {
+        return fmt.Errorf("failed to increment user quota: %w", err)
+      }
+
+      return nil
+    }
     ```
 </CodeGroup>
 
