@@ -80,9 +80,32 @@ Here is an example of how to validate the signature in Node.js and Python:
 
     return received_signature == generated_signature
     ```
+
+    ```go Go
+    package kobble
+
+    import (
+        "crypto/hmac"
+        "crypto/sha256"
+        "encoding/hex"
+    )
+
+    func IsValidSignature(receivedBody, receivedSignature, secret string) bool {
+        secretBytes, err := hex.DecodeString(secret)
+        if err != nil {
+            return false
+        }
+
+        h := hmac.New(sha256.New, secretBytes)
+        h.Write([]byte(receivedBody))
+        generatedSignature := hex.EncodeToString(h.Sum(nil))
+
+        return receivedSignature == generatedSignature
+    }
+    ```
 </CodeGroup>
 
-<Note>The [Node.js SDK](/libraries/admin-sdk/node#construct-event) provides a method to validate the signature for you.</Note>
+<Note>The [Node.js SDK](/libraries/admin-sdk/node#construct-event) or [Go SDK](/libraries/admin-sdk/go#construct-event) provides a method to validate the signature for you.</Note>
 
 ### Request Headers
 

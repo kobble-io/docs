@@ -120,7 +120,8 @@
       "group": "Admin SDKs",
       "pages": [
         "libraries/admin-sdk/node",
-        "libraries/admin-sdk/deno"
+        "libraries/admin-sdk/deno",
+        "libraries/admin-sdk/go"
       ]
     },
     {

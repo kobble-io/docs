@@ -43,4 +43,23 @@ Example code:
     // Check if the user has the permission to generate videos
     const isAllowed = await kobble.users.hasPermission(userId, 'generate-videos');
     ```
+
+    ```tsx Backend example (Go)
+    package kobble
+
+    import (
+      "github.com/kobble-io/go-admin/kobble"
+    )
+
+    func main() {
+      k := kobble.New("YOUR_SECRET_KEY", kobble.Options{})
+      hasPermission, err := k.Users.HasPermission("USER_ID", []string{"generate-videos"}, nil)
+      if err != nil {
+        panic(err)
+      }
+
+      // Do something if the user has the permission
+    }
+
+    ```
 </CodeGroup>
